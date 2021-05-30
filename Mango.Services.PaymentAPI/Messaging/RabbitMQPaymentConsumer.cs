@@ -1,8 +1,4 @@
-﻿using Mango.Services.OrderAPI.Messages;
-using Mango.Services.OrderAPI.Models;
-using Mango.Services.OrderAPI.RabbitMQSender;
-using Mango.Services.OrderAPI.Repository;
-using Mango.Services.PaymentAPI.Messages;
+﻿using Mango.Services.PaymentAPI.Messages;
 using Mango.Services.PaymentAPI.RabbitMQSender;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
@@ -55,7 +51,7 @@ namespace Mango.Services.PaymentAPI.Messaging
 
                 _channel.BasicAck(ea.DeliveryTag, false);
             };
-            _channel.BasicConsume("checkoutqueue", false, consumer);
+            _channel.BasicConsume("orderpaymentprocesstopic", false, consumer);
 
             return Task.CompletedTask;
         }
@@ -74,7 +70,7 @@ namespace Mango.Services.PaymentAPI.Messaging
 
             try
             {
-
+                _rabbitMQPaymentMessageSender.SendMessage(updatePaymentResultMessage);
                // await _messageBus.PublishMessage(updatePaymentResultMessage, orderupdatepaymentresulttopic);
                // await args.CompleteMessageAsync(args.Message);
             }
