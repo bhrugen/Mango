@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Mango.Services.ShoppingCartAPI.RabbitMQSender
 {
-    interface IRabbitMQCartMessageSender
+    public interface IRabbitMQCartMessageSender
     {
         void SendMessage(BaseMessage baseMessage, String queueName);
     }
