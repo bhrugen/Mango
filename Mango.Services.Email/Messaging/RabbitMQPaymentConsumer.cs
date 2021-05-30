@@ -17,7 +17,7 @@ namespace Mango.Services.PaymentAPI.Messaging
 
         private IConnection _connection;
         private IModel _channel;
-        private const string EchangeName= "PublishSubscribePaymentUpdate_Exchange";
+        private const string ExchangeName= "PublishSubscribePaymentUpdate_Exchange";
         private readonly EmailRepository _emailRepo;
         string queueName = "";
         public RabbitMQPaymentConsumer(EmailRepository emailRepo)
@@ -32,8 +32,9 @@ namespace Mango.Services.PaymentAPI.Messaging
 
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            _channel.ExchangeDeclare(EchangeName, ExchangeType.Fanout);
+            _channel.ExchangeDeclare(ExchangeName, ExchangeType.Fanout);
             queueName= _channel.QueueDeclare().QueueName;
+            _channel.QueueBind(queueName, ExchangeName,"");
         }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
