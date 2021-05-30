@@ -48,7 +48,7 @@ namespace Mango.Services.OrderAPI
             var optionBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
 
-
+            services.AddHostedService<RabbitMQPaymentConsumer>();
             services.AddHostedService<RabbitMQCheckoutConsumer>();
             services.AddSingleton(new OrderRepository(optionBuilder.Options));
             services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
