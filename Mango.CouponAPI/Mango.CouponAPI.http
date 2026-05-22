@@ -1,0 +1,11 @@
+@Mango.CouponAPI_HostAddress = http://localhost:5126
+
+GET {{Mango.CouponAPI_HostAddress}}/openapi/v1.json
+Accept: application/json
+
+###
+
+GET {{Mango.CouponAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
