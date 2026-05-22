@@ -1,4 +1,6 @@
 using Mango.CouponAPI.Data;
+using Mango.CouponAPI.Models;
+using Mango.CouponAPI.Models.Dto;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -12,7 +14,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
+builder.Services.AddAutoMapper(o =>
+{
+    o.CreateMap<CouponDto, Coupon>().ReverseMap();
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
