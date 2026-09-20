@@ -7,16 +7,16 @@ using Mango.Serives.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-[Route("api/[controller]")]
+[Route("api/coupons")]
 [ApiController]
 public class CouponAPIController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ApplicationDbContext _db;
     private ResponseDto _response;
     private IMapper _mapper;
-    public CouponAPIController(ApplicationDbContext context, IMapper mapper)
+    public CouponAPIController(ApplicationDbContext db, IMapper mapper)
     {
-        _context = context;
+        _db = db;
         _mapper = mapper;
         _response = new ResponseDto();
     }
@@ -27,7 +27,7 @@ public class CouponAPIController : ControllerBase
     {
         try
         {
-            IEnumerable<Coupon> objList = await _context.Coupons.ToListAsync();
+            IEnumerable<Coupon> objList = await _db.Coupons.ToListAsync();
             _response.Result = _mapper.Map<IEnumerable<CouponDto>>(objList);
         }
         catch(Exception ex)
@@ -45,8 +45,12 @@ public class CouponAPIController : ControllerBase
     {
         try
         {
-            var obj = await _context.Coupons.FindAsync(id);
+            var obj = await _db.Coupons.FindAsync(id);
             _response.Result = _mapper.Map<CouponDto>(obj);
+            if (obj == null)
+            {
+                return NotFound(_response);
+            }
         }
         catch (Exception ex)
         {
@@ -72,8 +76,8 @@ public class CouponAPIController : ControllerBase
                 _response.ErrorMessage = "CouponId is required for update.";
                 return BadRequest(_response);
             }
-            _context.Coupons.Update(obj);
-            await _context.SaveChangesAsync();
+            _db.Coupons.Update(obj);
+            await _db.SaveChangesAsync();
             _response.Result = _mapper.Map<CouponDto>(obj);
         }
         catch (Exception ex)
@@ -93,9 +97,16 @@ public class CouponAPIController : ControllerBase
     {
         try
         {
+            if (couponDto.CouponId > 0)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessage = "CouponId must be empty for creating a coupon.";
+                return BadRequest(_response);
+            }
             Coupon obj = _mapper.Map<Coupon>(couponDto);
-            _context.Coupons.Add(obj);
-            await _context.SaveChangesAsync();
+
+            _db.Coupons.Add(obj);
+            await _db.SaveChangesAsync();
             _response.Result = _mapper.Map<CouponDto>(obj);
         }
         catch (Exception ex)
@@ -113,15 +124,15 @@ public class CouponAPIController : ControllerBase
     {
         try
         {
-            var coupon = await _context.Coupons.FindAsync(id);
+            var coupon = await _db.Coupons.FindAsync(id);
             if(coupon == null)
             {
                 _response.IsSuccess = false;
                 _response.ErrorMessage = "Coupon not found.";
                 return NotFound(_response);
             }
-            _context.Coupons.Remove(coupon);
-            await _context.SaveChangesAsync();
+            _db.Coupons.Remove(coupon);
+            await _db.SaveChangesAsync();
         }
         catch (Exception ex)
         {
