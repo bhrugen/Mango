@@ -62,34 +62,6 @@ public class CouponAPIController : ControllerBase
        
     }
 
-    // PUT: api/Coupon/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPut]
-    public async Task<IActionResult> UpdateCoupon([FromBody]CouponDto couponDto)
-    {
-        try
-        {
-            Coupon obj = _mapper.Map<Coupon>(couponDto);
-            if (obj.CouponId == 0)
-            {
-                _response.IsSuccess = false;
-                _response.ErrorMessage = "CouponId is required for update.";
-                return BadRequest(_response);
-            }
-            _db.Coupons.Update(obj);
-            await _db.SaveChangesAsync();
-            _response.Result = _mapper.Map<CouponDto>(obj);
-        }
-        catch (Exception ex)
-        {
-            _response.IsSuccess = false;
-            _response.ErrorMessage = ex.Message;
-        }
-        if (!_response.IsSuccess) return BadRequest(_response);
-        return Ok(_response);
-     
-    }
-
     // POST: api/Coupon
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
@@ -116,6 +88,34 @@ public class CouponAPIController : ControllerBase
         }
         if (!_response.IsSuccess) return BadRequest(_response);
         return Ok(_response);
+    }
+
+    // PUT: api/Coupon/5
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPut]
+    public async Task<IActionResult> UpdateCoupon([FromBody] CouponDto couponDto)
+    {
+        try
+        {
+            Coupon obj = _mapper.Map<Coupon>(couponDto);
+            if (obj.CouponId == 0)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessage = "CouponId is required for update.";
+                return BadRequest(_response);
+            }
+            _db.Coupons.Update(obj);
+            await _db.SaveChangesAsync();
+            _response.Result = _mapper.Map<CouponDto>(obj);
+        }
+        catch (Exception ex)
+        {
+            _response.IsSuccess = false;
+            _response.ErrorMessage = ex.Message;
+        }
+        if (!_response.IsSuccess) return BadRequest(_response);
+        return Ok(_response);
+
     }
 
     // DELETE: api/Coupon/5
