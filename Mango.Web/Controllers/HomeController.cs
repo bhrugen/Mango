@@ -1,13 +1,26 @@
 using Mango.Web.Models;
+using Mango.Web.Service.IService;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace Mango.Web.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ICouponService _couponService;
+        public HomeController(ICouponService couponService)
         {
+            _couponService = couponService;
+        }
+        public async Task<IActionResult> Index()
+        {
+            ResponseDto? responseDto = await _couponService.GetAllCouponsAsync();
+            if (responseDto != null && responseDto.IsSuccess)
+            {
+                // Handle the successful response
+                List<CouponDto>? coupons = JsonConvert.DeserializeObject<List<CouponDto>>(Convert.ToString(responseDto.Result));
+            }
             return View();
         }
 
