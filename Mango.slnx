@@ -4,5 +4,6 @@
   </Folder>
   <Folder Name="/Services/">
     <Project Path="Mango.CouponAPI/Mango.CouponAPI.csproj" Id="604e40d8-0ee4-469c-9bc1-a726f3855782" />
+    <Project Path="Mango.Serives.Shared/Mango.Serives.Shared.csproj" Id="ea71aec3-5ade-4a19-aba6-fc1143ae82f8" />
   </Folder>
 </Solution>
