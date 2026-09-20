@@ -1,29 +1,62 @@
+using AutoMapper;
+using Mango.CouponAPI.Data;
+using Mango.CouponAPI.Models;
+using Mango.CouponAPI.Models.Dto;
+using Mango.Serives.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Mango.CouponAPI.Models;
-using Mango.CouponAPI.Data;
 
 [Route("api/[controller]")]
 [ApiController]
 public class CouponAPIController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
-    public CouponAPIController(ApplicationDbContext context)
+    private ResponseDto _response;
+    private IMapper _mapper;
+    public CouponAPIController(ApplicationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
+        _response = new ResponseDto();
     }
 
     // GET: api/Coupon
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Coupon>>> GetCoupon()
+    public async Task<ActionResult<ResponseDto>> GetCoupon()
     {
-        return await _context.Coupons.ToListAsync();
+        try
+        {
+            IEnumerable<Coupon> objList = await _context.Coupons.ToListAsync();
+            _response.Result = _mapper.Map<IEnumerable<CouponDto>>(objList);
+        }
+        catch(Exception ex)
+        {
+            _response.IsSuccess = false;
+            _response.ErrorMessage =ex.Message;
+        }
+        if(!_response.IsSuccess) return BadRequest(_response);
+        return Ok(_response);
     }
 
     // GET: api/Coupon/5
     [HttpGet("{couponid}")]
     public async Task<ActionResult<Coupon>> GetCoupon(int couponid)
     {
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+            _response.IsSuccess = false;
+            _response.ErrorMessage = ex.Message;
+        }
+        if (!_response.IsSuccess) return BadRequest(_response);
+        return Ok(_response);
+
+
+
+
         var coupon = await _context.Coupons.FindAsync(couponid);
 
         if (coupon == null)

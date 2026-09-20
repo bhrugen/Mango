@@ -25,4 +25,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Mango.Serives.Shared\Mango.Serives.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
