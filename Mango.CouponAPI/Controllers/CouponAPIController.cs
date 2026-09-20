@@ -1,5 +1,6 @@
 using AutoMapper;
 using Mango.CouponAPI.Data;
+using Mango.CouponAPI.Migrations;
 using Mango.CouponAPI.Models;
 using Mango.CouponAPI.Models.Dto;
 using Mango.Serives.Shared.Models;
@@ -22,7 +23,7 @@ public class CouponAPIController : ControllerBase
 
     // GET: api/Coupon
     [HttpGet]
-    public async Task<ActionResult<ResponseDto>> GetCoupon()
+    public async Task<ActionResult<ResponseDto>> GetAllCoupons()
     {
         try
         {
@@ -39,12 +40,88 @@ public class CouponAPIController : ControllerBase
     }
 
     // GET: api/Coupon/5
-    [HttpGet("{couponid}")]
-    public async Task<ActionResult<Coupon>> GetCoupon(int couponid)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<Coupon>> GetCouponById(int id)
     {
         try
         {
+            var obj = await _context.Coupons.FindAsync(id);
+            _response.Result = _mapper.Map<CouponDto>(obj);
+        }
+        catch (Exception ex)
+        {
+            _response.IsSuccess = false;
+            _response.ErrorMessage = ex.Message;
+        }
+        if (!_response.IsSuccess) return BadRequest(_response);
+        return Ok(_response);
+       
+    }
 
+    // PUT: api/Coupon/5
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPut]
+    public async Task<IActionResult> UpdateCoupon([FromBody]CouponDto couponDto)
+    {
+        try
+        {
+            Coupon obj = _mapper.Map<Coupon>(couponDto);
+            if (obj.CouponId == 0)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessage = "CouponId is required for update.";
+                return BadRequest(_response);
+            }
+            _context.Coupons.Update(obj);
+            await _context.SaveChangesAsync();
+            _response.Result = _mapper.Map<CouponDto>(obj);
+        }
+        catch (Exception ex)
+        {
+            _response.IsSuccess = false;
+            _response.ErrorMessage = ex.Message;
+        }
+        if (!_response.IsSuccess) return BadRequest(_response);
+        return Ok(_response);
+     
+    }
+
+    // POST: api/Coupon
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPost]
+    public async Task<ActionResult<Coupon>> CreateCoupon([FromBody]CouponDto couponDto)
+    {
+        try
+        {
+            Coupon obj = _mapper.Map<Coupon>(couponDto);
+            _context.Coupons.Add(obj);
+            await _context.SaveChangesAsync();
+            _response.Result = _mapper.Map<CouponDto>(obj);
+        }
+        catch (Exception ex)
+        {
+            _response.IsSuccess = false;
+            _response.ErrorMessage = ex.Message;
+        }
+        if (!_response.IsSuccess) return BadRequest(_response);
+        return Ok(_response);
+    }
+
+    // DELETE: api/Coupon/5
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteCoupon(int id)
+    {
+        try
+        {
+            var coupon = await _context.Coupons.FindAsync(id);
+            if(coupon == null)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessage = "Coupon not found.";
+                return NotFound(_response);
+            }
+            _context.Coupons.Remove(coupon);
+            await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {
@@ -54,79 +131,5 @@ public class CouponAPIController : ControllerBase
         if (!_response.IsSuccess) return BadRequest(_response);
         return Ok(_response);
 
-
-
-
-        var coupon = await _context.Coupons.FindAsync(couponid);
-
-        if (coupon == null)
-        {
-            return NotFound();
-        }
-
-        return coupon;
-    }
-
-    // PUT: api/Coupon/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPut("{couponid}")]
-    public async Task<IActionResult> PutCoupon(int? couponid, Coupon coupon)
-    {
-        if (couponid != coupon.CouponId)
-        {
-            return BadRequest();
-        }
-
-        _context.Entry(coupon).State = EntityState.Modified;
-
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!CouponExists(couponid))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
-        }
-
-        return NoContent();
-    }
-
-    // POST: api/Coupon
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPost]
-    public async Task<ActionResult<Coupon>> PostCoupon(Coupon coupon)
-    {
-        _context.Coupons.Add(coupon);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction("GetCoupon", new { couponid = coupon.CouponId }, coupon);
-    }
-
-    // DELETE: api/Coupon/5
-    [HttpDelete("{couponid}")]
-    public async Task<IActionResult> DeleteCoupon(int? couponid)
-    {
-        var coupon = await _context.Coupons.FindAsync(couponid);
-        if (coupon == null)
-        {
-            return NotFound();
-        }
-
-        _context.Coupons.Remove(coupon);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
-    }
-
-    private bool CouponExists(int? couponid)
-    {
-        return _context.Coupons.Any(e => e.CouponId == couponid);
     }
 }
