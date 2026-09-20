@@ -62,6 +62,29 @@ public class CouponAPIController : ControllerBase
        
     }
 
+    // GET: api/Coupon/5
+    [HttpGet("GetByCode/{code}")]
+    public async Task<ActionResult<Coupon>> GetCouponByCode(string code)
+    {
+        try
+        {
+            var obj = await _db.Coupons.FirstOrDefaultAsync(c => c.CouponCode.ToLower() == code.ToLower());
+            _response.Result = _mapper.Map<CouponDto>(obj);
+            if (obj == null)
+            {
+                return NotFound(_response);
+            }
+        }
+        catch (Exception ex)
+        {
+            _response.IsSuccess = false;
+            _response.ErrorMessage = ex.Message;
+        }
+        if (!_response.IsSuccess) return BadRequest(_response);
+        return Ok(_response);
+
+    }
+
     // POST: api/Coupon
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
