@@ -21,6 +21,11 @@ namespace Mango.Web.Controllers
                 // Handle the successful response
                 coupons = responseDto.GetResult<List<CouponDto>>();
             }
+            else
+            {
+                TempData["error"] = responseDto?.ErrorMessage;
+            }
+            
             return View(coupons);
         }
 

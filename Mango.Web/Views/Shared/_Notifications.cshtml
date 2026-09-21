@@ -1,0 +1,25 @@
+﻿@if (TempData["success"] != null || TempData["error"] != null)
+{
+        <script>
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                positionClass: "toast-top-right",
+                preventDuplicates: true,
+                timeOut: 4000,
+                extendedTimeOut: 1500,
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut"
+            };
+        @if(TempData["success"] != null)
+        {
+            <text> toastr.success(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(@TempData["success"])));</text>
+        }
+        @if(TempData["error"] != null)
+        {
+            <text>toastr.error(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(@TempData["error"])));</text>
+        }
+        </script>
+    }
