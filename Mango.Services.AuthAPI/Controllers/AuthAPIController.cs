@@ -1,5 +1,6 @@
 ﻿using Mango.Serives.Shared.Models;
 using Mango.Services.AuthAPI.Models;
+using Mango.Services.AuthAPI.Service.IService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,16 +12,20 @@ namespace Mango.Services.AuthAPI.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private const string CustomerRole = "CUSTOMER";
         private const string AdminRole = "ADMIN";
         private readonly ResponseDto _responseDto;
 
 
-        public AuthAPIController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthAPIController(UserManager<ApplicationUser> userManager,
+            IJwtTokenGenerator jwtTokenGenerator,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _responseDto = new ResponseDto();
             _roleManager = roleManager;
+            _jwtTokenGenerator = jwtTokenGenerator;
         }
 
         [HttpPost("register")]
@@ -90,7 +95,7 @@ namespace Mango.Services.AuthAPI.Controllers
 
             _responseDto.Result = new LoginResponseDto()
             {
-                Token = "This is a token",
+                Token = _jwtTokenGenerator.GenerateToken(user, await _userManager.GetRolesAsync(user)),
                 User = new UserDto()
                 {
                     Email = user.Email,

@@ -1,6 +1,10 @@
 ﻿using Mango.Services.AuthAPI.Models;
 using Mango.Services.AuthAPI.Service.IService;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Mango.Services.AuthAPI.Service
 {
@@ -15,7 +19,36 @@ namespace Mango.Services.AuthAPI.Service
 
         public string GenerateToken(ApplicationUser user, IList<string> roles)
         {
-            throw new NotImplementedException();
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var key = Encoding.ASCII.GetBytes(_jwtOptions.Secret);
+
+            var claimList = new List<Claim>()
+            {
+                new Claim(JwtRegisteredClaimNames.Sub,user.Id),
+                new Claim(JwtRegisteredClaimNames.Email,user.Email!),
+                new Claim(JwtRegisteredClaimNames.PhoneNumber,user.PhoneNumber!),
+                new Claim(JwtRegisteredClaimNames.Name,user.UserName!),
+                new Claim(JwtRegisteredClaimNames.GivenName,user.Name!),
+            };
+
+            claimList.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claimList),
+                Expires = DateTime.UtcNow.AddDays(3),
+                Audience = _jwtOptions.Audience,
+                Issuer = _jwtOptions.Issuer,
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
+
         }
     }
 }
