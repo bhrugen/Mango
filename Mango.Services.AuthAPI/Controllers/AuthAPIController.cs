@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mango.Services.AuthAPI.Controllers
 {
-    public class AuthAPIController : Controller
+    [Route("api/auth")]
+    [ApiController]
+    public class AuthAPIController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -21,14 +23,62 @@ namespace Mango.Services.AuthAPI.Controllers
             _roleManager = roleManager;
         }
 
+        [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterationRequestDto model)
         {
-            return View();
+            var roleToAssign = string.IsNullOrEmpty(model.Role) ? CustomerRole : model.Role.ToUpper();
+            if (roleToAssign != CustomerRole)
+            {
+                //add one more check, later on.
+                if (roleToAssign != AdminRole)
+                {
+                    _responseDto.IsSuccess = false;
+                    _responseDto.ErrorMessage = "Invalid role specified.";
+                    return BadRequest(_responseDto);
+                }
+            }
+
+            ApplicationUser user = new()
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                Name = model.Name,
+                PhoneNumber = model.PhoneNumber
+            };
+
+
+            try
+            {
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (!result.Succeeded)
+                {
+                    _responseDto.IsSuccess = false;
+                    _responseDto.ErrorMessage = "User creation failed. Please check the details and try again.";
+                    return BadRequest(_responseDto);
+                }
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.ErrorMessage = "Error Encountered";
+                return StatusCode(StatusCodes.Status500InternalServerError, _responseDto);
+            }
+
+
+            if(!await _roleManager.RoleExistsAsync(roleToAssign))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(roleToAssign));
+            }
+
+            await _userManager.AddToRoleAsync(user, roleToAssign);
+
+            return Ok(_responseDto);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto model)
         {
-            return View();
+            return Ok();
         }
     }
 }
