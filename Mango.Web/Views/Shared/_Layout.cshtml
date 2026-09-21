@@ -32,8 +32,23 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="manageDropdown"
+                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-sliders me-1"></i>Manage
+                            </a>
+                            <ul class="dropdown-menu dropdown-restaurant" aria-labelledby="manageDropdown">
+                                <li>
+                                    <a asp-controller="Coupon" asp-action="CouponIndex" class="dropdown-item">
+                                        <i class="bi bi-ticket-perforated text-warning"></i>Coupons
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-item">
+                                        <i class="bi bi-egg-fried text-warning"></i>Dishes
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
