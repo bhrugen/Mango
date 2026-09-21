@@ -23,7 +23,7 @@ namespace Mango.Services.AuthAPI.Controllers
             _roleManager = roleManager;
         }
 
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterationRequestDto model)
         {
             var roleToAssign = string.IsNullOrEmpty(model.Role) ? CustomerRole : model.Role.ToUpper();
@@ -75,10 +75,32 @@ namespace Mango.Services.AuthAPI.Controllers
             return Ok(_responseDto);
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto model)
         {
-            return Ok();
+
+            var user = await _userManager.FindByNameAsync(model.Email);
+
+            if(user==null || !await _userManager.CheckPasswordAsync(user, model.Password))
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.ErrorMessage= "Email or password is incorrect";
+                return BadRequest(_responseDto);
+            }
+
+            _responseDto.Result = new LoginResponseDto()
+            {
+                Token = "This is a token",
+                User = new UserDto()
+                {
+                    Email = user.Email,
+                    Name = user.Name,
+                    ID = user.Id,
+                    PhoneNumber = user.PhoneNumber
+                }
+            };
+
+            return Ok(_responseDto);
         }
     }
 }
