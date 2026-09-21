@@ -1,9 +1,11 @@
+@model IEnumerable<CouponDto>
+
 <div class="d-flex justify-content-between align-items-center mb-4 fade-in-up">
 	<div>
 		<div class="section-label"><span>Admin</span></div>
 		<h2 class="section-title mb-0">Promo Codes</h2>
 	</div>
-	<a href="#" class="btn btn-gold">
+	<a asp-action="CouponCreate" class="btn btn-gold">
 		<i class="bi bi-plus-circle me-2"></i>Add Coupon
 	</a>
 </div>
@@ -20,22 +22,27 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td class="align-middle">
-						<span class="badge badge-gold" style="font-size:.85rem;padding:.35rem .75rem;">
-							<i class="bi bi-ticket-perforated me-1"></i>SAVE10
-						</span>
-					</td>
-					<td class="align-middle">
-						<span class="fw-semibold" style="color:var(--restaurant-green);">$10.00</span>
-					</td>
-					<td class="align-middle text-muted">$50.00</td>
-					<td class="align-middle text-end">
-						<a href="#" class="btn btn-sm btn-outline-danger">
-							<i class="bi bi-trash"></i>
-						</a>
-					</td>
-				</tr>
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td class="align-middle">
+							<span class="badge badge-gold" style="font-size:.85rem;padding:.35rem .75rem;">
+								<i class="bi bi-ticket-perforated me-1"></i>@item.CouponCode
+							</span>
+						</td>
+						<td class="align-middle">
+							<span class="fw-semibold" style="color:var(--restaurant-green);">
+								@item.DiscountAmount.ToString("c")
+							</span>
+						</td>
+						<td class="align-middle text-muted">@item.MinAmount.ToString("c")</td>
+						<td class="align-middle text-end">
+							<a asp-action="CouponDelete" class="btn btn-sm btn-outline-danger">
+								<i class="bi bi-trash"></i>
+							</a>
+						</td>
+					</tr>
+				}
 			</tbody>
 		</table>
 	</div>
