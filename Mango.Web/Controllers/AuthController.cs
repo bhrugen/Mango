@@ -50,6 +50,11 @@ namespace Mango.Web.Controllers
             return View(registerationRequestDto);
         }
 
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
 
         private async Task SignInUser(LoginResponseDto model)
         {

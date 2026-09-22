@@ -1,3 +1,5 @@
+@model LoginRequestDto
+
 <div class="d-flex align-items-center justify-content-center pb-5 pt-2">
     <div class="auth-card fade-in-up w-100" style="max-width:440px;">
         <div class="auth-card-header">
@@ -11,19 +13,21 @@
                     <label for="UserName" class="form-label">
                         <i class="bi bi-person me-1 text-gold"></i>Username
                     </label>
-                    <input type="text" id="UserName" name="UserName" class="form-control" placeholder="Enter your username" autofocus />
+                    <input asp-for="Email"  class="form-control" placeholder="Enter your username" autofocus />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
                 <div class="mb-4">
                     <label for="passwordField" class="form-label">
                         <i class="bi bi-lock me-1 text-gold"></i>Password
                     </label>
                     <div class="input-group">
-                        <input type="password" id="passwordField" name="Password" class="form-control"
+                        <input type="password" asp-for="Password" class="form-control"
                                placeholder="Enter your password" />
                         <button class="btn btn-outline-secondary" type="button" id="togglePassword"
                                 style="border:2px solid var(--border-warm);">
                             <i class="bi bi-eye" id="toggleIcon"></i>
                         </button>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
                     </div>
                 </div>
                 <div class="d-grid mb-4">
@@ -34,7 +38,7 @@
                 <div class="divider-ornament"><span>&#10022;</span></div>
                 <div class="d-flex justify-content-center align-items-center gap-2 my-3">
                     <small class="text-muted">New to Mango?</small>
-                    <a href="/Auth/Register"
+                    <a asp-controller="Auth" asp-action="Register"
                        style="color:var(--brand-primary);font-weight:700;text-decoration:none;">Create an account</a>
                 </div>
             </form>
