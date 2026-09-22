@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Coupon\" />
+    <Folder Include="Views\Auth\" />
   </ItemGroup>
 
 </Project>

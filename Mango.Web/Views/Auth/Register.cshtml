@@ -1,0 +1,79 @@
+<div class="d-flex align-items-center justify-content-center pb-5 pt-2">
+    <div class="auth-card fade-in-up w-100" style="max-width:520px;">
+        <div class="auth-card-header">
+            <span class="auth-icon">&#129374;</span>
+            <h2>Join Mango</h2>
+            <p>Create your account and start ordering</p>
+        </div>
+        <div class="auth-card-body">
+            <form method="post">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="Email" class="form-label">
+                            <i class="bi bi-envelope me-1 text-gold"></i>Email Address
+                        </label>
+                        <input type="email" id="Email" name="Email" class="form-control" placeholder="you@example.com" autofocus />
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="Name" class="form-label">
+                            <i class="bi bi-person me-1 text-gold"></i>Full Name
+                        </label>
+                        <input type="text" id="Name" name="Name" class="form-control" placeholder="John Doe" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="PhoneNumber" class="form-label">
+                            <i class="bi bi-telephone me-1 text-gold"></i>Phone
+                        </label>
+                        <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" placeholder="+1 (555) 000-0000" />
+                    </div>
+                    <div class="col-12">
+                        <label for="passwordField" class="form-label">
+                            <i class="bi bi-lock me-1 text-gold"></i>Password
+                        </label>
+                        <div class="input-group">
+                            <input type="password" id="passwordField" name="Password" class="form-control"
+                                   placeholder="Create a strong password" />
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword"
+                                    style="border:2px solid var(--border-warm);">
+                                <i class="bi bi-eye" id="toggleIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="Role" class="form-label">
+                            <i class="bi bi-shield-check me-1 text-gold"></i>Account Role
+                        </label>
+                        <select id="Role" name="Role" class="form-select">
+                            <option disabled selected>Select role...</option>
+                            <option value="ADMIN">ADMIN</option>
+                            <option value="CUSTOMER">CUSTOMER</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-gold btn-lg">
+                                <i class="bi bi-person-plus me-2"></i>Create Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="divider-ornament mt-4"><span>&#10022;</span></div>
+                <div class="d-flex justify-content-center align-items-center gap-2 my-3">
+                    <small class="text-muted">Already have an account?</small>
+                    <a href="/Auth/Login"
+                       style="color:var(--brand-primary);font-weight:700;text-decoration:none;">Sign in</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const f = document.getElementById('passwordField');
+        const icon = document.getElementById('toggleIcon');
+        f.type = f.type === 'password' ? 'text' : 'password';
+        icon.classList.toggle('bi-eye');
+        icon.classList.toggle('bi-eye-slash');
+    });
+</script>
