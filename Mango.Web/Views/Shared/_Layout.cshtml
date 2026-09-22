@@ -51,18 +51,31 @@
                             </ul>
                         </li>
                     </ul>
-
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-2">
-                        <li class="nav-item">
-                            <a class="btn btn-outline-light btn-sm" asp-controller="Auth" asp-action="Login">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Login
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-gold btn-sm" asp-controller="Auth" asp-action="Register">
-                                <i class="bi bi-person-plus me-1"></i> Sign Up
-                            </a>
-                        </li>
+                    @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-outline-light btn-sm" asp-controller="Auth" asp-action="Logout">
+                                    <i class="bi bi-box-arrow-right" style="color:#ef4444;"></i>
+                                    <span style="color:#ef4444;">Sign Out</span>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            
+                                <li class="nav-item">
+                                    <a class="btn btn-outline-light btn-sm" asp-controller="Auth" asp-action="Login">
+                                        <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-gold btn-sm" asp-controller="Auth" asp-action="Register">
+                                        <i class="bi bi-person-plus me-1"></i> Sign Up
+                                    </a>
+                                </li>
+                           
+                        }
                     </ul>
                 </div>
             </div>
