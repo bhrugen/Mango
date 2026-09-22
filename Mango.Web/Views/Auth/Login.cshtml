@@ -27,8 +27,9 @@
                                 style="border:2px solid var(--border-warm);">
                             <i class="bi bi-eye" id="toggleIcon"></i>
                         </button>
-                        <span asp-validation-for="Password" class="text-danger small"></span>
+                        
                     </div>
+                    <span asp-validation-for="Password" class="text-danger small"></span>
                 </div>
                 <div class="d-grid mb-4">
                     <button type="submit" class="btn btn-gold btn-lg">
@@ -45,7 +46,8 @@
         </div>
     </div>
 </div>
-
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
 <script>
     document.getElementById('togglePassword').addEventListener('click', function () {
         const f = document.getElementById('passwordField');
@@ -55,3 +57,4 @@
         icon.classList.toggle('bi-eye-slash');
     });
 </script>
+}

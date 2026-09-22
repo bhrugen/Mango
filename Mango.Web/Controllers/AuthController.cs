@@ -52,6 +52,24 @@ namespace Mango.Web.Controllers
             return View(registerationRequestDto);
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterationRequestDto obj)
+        {
+            ResponseDto? responseDto = await _authSerivce.RegisterAsync(obj);
+            if (responseDto != null && responseDto.IsSuccess)
+            {
+                // Handle the successful response
+                TempData["success"] = "Registration Successful";
+                return RedirectToAction(nameof(Login));
+            }
+            else
+            {
+                TempData["error"] = responseDto?.ErrorMessage;
+                return View(obj);
+            }
+        }
+
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
