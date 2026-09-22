@@ -12,10 +12,11 @@ namespace Mango.Web.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthSerivce _authSerivce;
-
-        public AuthController(IAuthSerivce authSerivce)
+        private readonly ITokenService _tokenService;
+        public AuthController(IAuthSerivce authSerivce, ITokenService tokenService)
         {
             _authSerivce = authSerivce;
+            _tokenService = tokenService;
         }
 
         [HttpGet]
@@ -34,6 +35,7 @@ namespace Mango.Web.Controllers
                 // Handle the successful response
                 LoginResponseDto loginResponseDto = responseDto.GetResult<LoginResponseDto>();
                 await SignInUser(loginResponseDto);
+                _tokenService.SetToken(loginResponseDto.Token);
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -53,6 +55,7 @@ namespace Mango.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
+            _tokenService.ClearToken();
             return RedirectToAction("Index", "Home");
         }
 
