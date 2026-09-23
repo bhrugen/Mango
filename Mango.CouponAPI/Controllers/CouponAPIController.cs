@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 [Route("api/coupons")]
 [ApiController]
-[Authorize]
+[Authorize(Roles ="ADMIN")]
 public class CouponAPIController : ControllerBase
 {
     private readonly ApplicationDbContext _db;
@@ -66,6 +66,7 @@ public class CouponAPIController : ControllerBase
 
     // GET: api/Coupon/5
     [HttpGet("GetByCode/{code}")]
+    [AllowAnonymous]
     public async Task<ActionResult<Coupon>> GetCouponByCode(string code)
     {
         try
