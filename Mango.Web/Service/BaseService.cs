@@ -42,6 +42,22 @@ namespace Mango.Web.Service
 
 
                 var apiContent = await apiResponse.Content.ReadAsStringAsync();
+                switch (apiResponse.StatusCode)
+                {
+                    case System.Net.HttpStatusCode.Unauthorized:
+                        return new ResponseDto
+                        {
+                            IsSuccess = false,
+                            ErrorMessage = "You are not authorized to access this resource."
+                        };
+                    case System.Net.HttpStatusCode.Forbidden:
+                        return new ResponseDto
+                        {
+                            IsSuccess = false,
+                            ErrorMessage = "You do not have permission to access this resource."
+                        };
+                }
+
                 var apiResponseDto = JsonSerializer.Deserialize<ResponseDto>(apiContent, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
