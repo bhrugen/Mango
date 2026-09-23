@@ -1,6 +1,7 @@
 using Mango.CouponAPI.Data;
 using Mango.CouponAPI.Models;
 using Mango.CouponAPI.Models.Dto;
+using Mango.Serives.Shared.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -22,26 +23,7 @@ builder.Services.AddAutoMapper(o =>
     o.CreateMap<CouponDto, Coupon>().ReverseMap();
 });
 
-var jwtOptions = builder.Configuration.GetSection("ApiSettings:JwtOptions");
-var secret = jwtOptions.GetValue<string>("Secret");
-var issuer = jwtOptions.GetValue<string>("Issuer");
-var audience = jwtOptions.GetValue<string>("Audience");
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = issuer,
-            ValidAudience = audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
-        };
-    });
-
+builder.AddJwtAuthentication();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
