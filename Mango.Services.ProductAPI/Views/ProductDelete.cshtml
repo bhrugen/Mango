@@ -1,0 +1,57 @@
+<div class="fade-in-up" style="max-width:520px;margin:0 auto;">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <div class="section-label"><span>Admin</span></div>
+            <h2 class="section-title mb-0">Delete Dish</h2>
+        </div>
+        <a href="#" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Back
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-dark-restaurant">
+            <span style="font-family:Georgia,serif;font-weight:700;color:var(--brand-light);font-size:1rem;">
+                <i class="bi bi-trash me-2"></i>Confirm Delete
+            </span>
+        </div>
+        <div class="card-body">
+
+            <img src="https://via.placeholder.com/480x200" alt="Mango Chicken Tikka" class="w-100 mb-3" style="height:200px;object-fit:cover;border-radius:6px;" />
+
+            <div class="trust-badge mb-4" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);">
+                <i class="bi bi-exclamation-triangle-fill" style="color:#ef4444;font-size:1.25rem;"></i>
+                <div>
+                    <div class="fw-semibold" style="font-size:.875rem;color:#ef4444;">This action cannot be undone.</div>
+                    <div class="text-muted" style="font-size:.8rem;">The dish will be permanently removed.</div>
+                </div>
+            </div>
+
+            <form method="post">
+                <input type="hidden" value="1" />
+                <div class="mb-3">
+                    <label class="form-label">Dish Name</label>
+                    <input type="text" value="Mango Chicken Tikka" disabled class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
+                    <input type="text" value="Main Course" disabled class="form-control" />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="text" value="14.99" disabled class="form-control" />
+                    </div>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i>Delete Dish
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
