@@ -20,7 +20,9 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddAutoMapper(o =>
 {
-    o.CreateMap<ProductDto, Product>().ReverseMap();
+    o.CreateMap<ProductDto, Product>()
+        .ReverseMap()
+        .ForMember(dest => dest.Image, opt => opt.Ignore());
 });
 
 builder.AddJwtAuthentication();

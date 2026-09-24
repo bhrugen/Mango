@@ -3,6 +3,7 @@ using Mango.ProductAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,14 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Mango.ProductAPI.Migrations;
 
 [DbContext(typeof(ApplicationDbContext))]
-partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+[Migration("20260924013835_SeedProductMenu")]
+partial class _20260924013835_SeedProductMenu
 {
-    // If you encounter a merge conflict in the line below, it means you need to
-    // discard one of the migration branches and recreate its migrations on top of
-    // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20260924014421_ReplaceImageUrlWithFileName";
-
-    protected override void BuildModel(ModelBuilder modelBuilder)
+    /// <inheritdoc />
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
 #pragma warning disable 612, 618
         modelBuilder
@@ -40,7 +38,10 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                 b.Property<string>("Description")
                     .HasColumnType("nvarchar(max)");
 
-                b.Property<string>("ImageFileName")
+                b.Property<string>("ImageLocalPath")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("ImageUrl")
                     .HasColumnType("nvarchar(max)");
 
                 b.Property<string>("Name")
@@ -60,6 +61,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         ProductId = 1,
                         CategoryName = "Appetizer",
                         Description = "Grilled bread rubbed with garlic and topped with fresh tomato, basil, and olive oil.",
+                        ImageUrl = "https://localhost:7003/ProductImages/a-bruschetta.png",
                         Name = "Bruschetta",
                         Price = 8.9900000000000002
                     },
@@ -68,6 +70,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         ProductId = 2,
                         CategoryName = "Appetizer",
                         Description = "Sliced tomatoes and fresh mozzarella layered with basil and a balsamic drizzle.",
+                        ImageUrl = "https://localhost:7003/ProductImages/a-caprese-salad.png",
                         Name = "Caprese Salad",
                         Price = 9.9900000000000002
                     },
@@ -76,6 +79,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         ProductId = 3,
                         CategoryName = "Appetizer",
                         Description = "Oven-baked Italian flatbread with rosemary, sea salt, and olive oil.",
+                        ImageUrl = "https://localhost:7003/ProductImages/a-focaccia-bread.png",
                         Name = "Focaccia Bread",
                         Price = 6.9900000000000002
                     },
@@ -84,6 +88,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         ProductId = 4,
                         CategoryName = "Main Course",
                         Description = "Classic Roman pasta tossed with Pecorino Romano and cracked black pepper.",
+                        ImageUrl = "https://localhost:7003/ProductImages/e-cacio-pepe.png",
                         Name = "Cacio e Pepe",
                         Price = 15.99
                     },
@@ -92,6 +97,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         ProductId = 5,
                         CategoryName = "Main Course",
                         Description = "Wood-fired pizza with San Marzano tomatoes, fresh mozzarella, and basil.",
+                        ImageUrl = "https://localhost:7003/ProductImages/e-margherita-pizza.png",
                         Name = "Margherita Pizza",
                         Price = 14.99
                     },
@@ -100,6 +106,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         ProductId = 6,
                         CategoryName = "Main Course",
                         Description = "Pasta tossed in a vibrant basil pesto with pine nuts and Parmesan.",
+                        ImageUrl = "https://localhost:7003/ProductImages/e-pesto-pasta.png",
                         Name = "Pesto Pasta",
                         Price = 15.49
                     },
@@ -108,6 +115,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         ProductId = 7,
                         CategoryName = "Main Course",
                         Description = "Wood-fired pizza topped with basil pesto, mozzarella, and cherry tomatoes.",
+                        ImageUrl = "https://localhost:7003/ProductImages/e-pesto-pizza.png",
                         Name = "Pesto Pizza",
                         Price = 16.489999999999998
                     },
@@ -116,6 +124,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         ProductId = 8,
                         CategoryName = "Main Course",
                         Description = "Pasta in a rich San Marzano tomato sauce with fresh basil and garlic.",
+                        ImageUrl = "https://localhost:7003/ProductImages/e-pomodoro-pasta.png",
                         Name = "Pomodoro Pasta",
                         Price = 13.99
                     },
@@ -124,6 +133,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         ProductId = 9,
                         CategoryName = "Main Course",
                         Description = "Handmade ravioli filled with ricotta and spinach in a sage butter sauce.",
+                        ImageUrl = "https://localhost:7003/ProductImages/e-spinach-ravioli.png",
                         Name = "Spinach Ravioli",
                         Price = 16.989999999999998
                     },
@@ -132,6 +142,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         ProductId = 10,
                         CategoryName = "Dessert",
                         Description = "Crisp pastry shell filled with sweetened ricotta and chocolate chips.",
+                        ImageUrl = "https://localhost:7003/ProductImages/d-cannolo.png",
                         Name = "Cannolo",
                         Price = 7.9900000000000002
                     },
@@ -140,6 +151,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         ProductId = 11,
                         CategoryName = "Dessert",
                         Description = "Silky vanilla bean panna cotta topped with a fresh berry compote.",
+                        ImageUrl = "https://localhost:7003/ProductImages/d-panna-cotta.png",
                         Name = "Panna Cotta",
                         Price = 7.4900000000000002
                     },
@@ -148,6 +160,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                         ProductId = 12,
                         CategoryName = "Dessert",
                         Description = "Layers of espresso-soaked ladyfingers and mascarpone cream, dusted with cocoa.",
+                        ImageUrl = "https://localhost:7003/ProductImages/d-tiramisu.png",
                         Name = "Tiramisu",
                         Price = 8.4900000000000002
                     });

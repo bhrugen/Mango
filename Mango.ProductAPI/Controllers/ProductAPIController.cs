@@ -32,7 +32,7 @@ public class ProductAPIController : ControllerBase
         try
         {
             IEnumerable<Product> objList = await _db.Products.ToListAsync();
-            _response.Result = _mapper.Map<IEnumerable<ProductDto>>(objList);
+            _response.Result = objList.Select(MapToDto);
         }
         catch (Exception ex)
         {
@@ -57,7 +57,7 @@ public class ProductAPIController : ControllerBase
                 _response.ErrorMessage = "Product not found.";
                 return NotFound(_response);
             }
-            _response.Result = _mapper.Map<ProductDto>(obj);
+            _response.Result = MapToDto(obj);
         }
         catch (Exception ex)
         {
@@ -88,11 +88,11 @@ public class ProductAPIController : ControllerBase
 
             if (productDto.Image != null)
             {
-                await SaveProductImageAsync(obj, productDto.Image);
+                obj.ImageFileName = await SaveProductImageAsync(productDto.Image);
                 await _db.SaveChangesAsync();
             }
 
-            _response.Result = _mapper.Map<ProductDto>(obj);
+            _response.Result = MapToDto(obj);
         }
         catch (Exception ex)
         {
@@ -125,11 +125,11 @@ public class ProductAPIController : ControllerBase
             if (productDto.Image != null)
             {
                 DeleteProductImage(obj);
-                await SaveProductImageAsync(obj, productDto.Image);
+                obj.ImageFileName = await SaveProductImageAsync(productDto.Image);
             }
 
             await _db.SaveChangesAsync();
-            _response.Result = _mapper.Map<ProductDto>(obj);
+            _response.Result = MapToDto(obj);
         }
         catch (Exception ex)
         {
@@ -168,7 +168,18 @@ public class ProductAPIController : ControllerBase
         return Ok(_response);
     }
 
-    private async Task SaveProductImageAsync(Product product, IFormFile image)
+    private ProductDto MapToDto(Product product)
+    {
+        var dto = _mapper.Map<ProductDto>(product);
+        if (!string.IsNullOrEmpty(product.ImageFileName))
+        {
+            var baseUrl = $"{Request.Scheme}://{Request.Host.Value}{Request.PathBase.Value}";
+            dto.ImageUrl = $"{baseUrl}/ProductImages/{product.ImageFileName}";
+        }
+        return dto;
+    }
+
+    private async Task<string> SaveProductImageAsync(IFormFile image)
     {
         string fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
         string productPath = Path.Combine(_webHostEnvironment.WebRootPath, "ProductImages");
@@ -180,18 +191,19 @@ public class ProductAPIController : ControllerBase
             await image.CopyToAsync(fileStream);
         }
 
-        var baseUrl = $"{Request.Scheme}://{Request.Host.Value}{Request.PathBase.Value}";
-        product.ImageUrl = $"{baseUrl}/ProductImages/{fileName}";
-        product.ImageLocalPath = filePath;
+        return fileName;
     }
 
     private void DeleteProductImage(Product product)
     {
-        if (!string.IsNullOrEmpty(product.ImageLocalPath) && System.IO.File.Exists(product.ImageLocalPath))
+        if (!string.IsNullOrEmpty(product.ImageFileName))
         {
-            System.IO.File.Delete(product.ImageLocalPath);
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "ProductImages", product.ImageFileName);
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
         }
-        product.ImageUrl = null;
-        product.ImageLocalPath = null;
+        product.ImageFileName = null;
     }
 }
