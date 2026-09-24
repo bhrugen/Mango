@@ -16,11 +16,13 @@ namespace Mango.ProductAPI.Controllers
     {
         private readonly ApplicationDbContext _db;
         private ResponseDto _response;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private IMapper _mapper;
-        public ProductAPIController(ApplicationDbContext db, IMapper mapper)
+        public ProductAPIController(ApplicationDbContext db, IMapper mapper, IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
             _mapper = mapper;
+            _webHostEnvironment = webHostEnvironment;
             _response = new ResponseDto();
         }
 
@@ -146,6 +148,40 @@ namespace Mango.ProductAPI.Controllers
             if (!_response.IsSuccess) return BadRequest(_response);
             return Ok(_response);
 
+        }
+
+
+
+
+        private async Task<string> SaveProductImageAsync(IFormFile image)
+        {
+            string fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";   
+
+            string productPath = Path.Combine(_webHostEnvironment.WebRootPath, "ProductImages");
+
+            Directory.CreateDirectory(productPath);
+
+            var filePath = Path.Combine(productPath, fileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await image.CopyToAsync(fileStream);
+            }
+            return fileName;
+        }
+
+
+        private void DeleteProductImage(Product product)
+        {
+            if (!string.IsNullOrEmpty(product.ImageFileName))
+            {
+                var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "ProductImages", product.ImageFileName);
+                if(System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+
+            product.ImageFileName = null;
         }
     }
 }
