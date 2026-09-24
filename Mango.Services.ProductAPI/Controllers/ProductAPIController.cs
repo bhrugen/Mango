@@ -33,7 +33,7 @@ namespace Mango.ProductAPI.Controllers
             try
             {
                 IEnumerable<Product> objList = await _db.Products.ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<ProductDto>>(objList);
+                _response.Result = objList.Select(MapProductToProductDto);
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace Mango.ProductAPI.Controllers
             try
             {
                 var obj = await _db.Products.FindAsync(id);
-                _response.Result = _mapper.Map<ProductDto>(obj);
+                _response.Result = MapProductToProductDto(obj);
                 if (obj == null)
                 {
                     return NotFound(_response);
@@ -85,7 +85,12 @@ namespace Mango.ProductAPI.Controllers
 
                 _db.Products.Add(obj);
                 await _db.SaveChangesAsync();
-                _response.Result = _mapper.Map<ProductDto>(obj);
+                if(productDto.Image != null)
+                {
+                    obj.ImageFileName = await SaveProductImageAsync(productDto.Image);
+                    await _db.SaveChangesAsync();
+                }
+                _response.Result = MapProductToProductDto(obj);
             }
             catch (Exception ex)
             {
@@ -99,7 +104,8 @@ namespace Mango.ProductAPI.Controllers
         // PUT: api/Product/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public async Task<IActionResult> UpdateProduct([FromBody] ProductDto productDto)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdateProduct([FromForm] ProductDto productDto)
         {
             try
             {
@@ -111,8 +117,13 @@ namespace Mango.ProductAPI.Controllers
                     return BadRequest(_response);
                 }
                 _db.Products.Update(obj);
+                if (productDto.Image != null)
+                {
+                    DeleteProductImage(obj);
+                    obj.ImageFileName = await SaveProductImageAsync(productDto.Image);
+                }
                 await _db.SaveChangesAsync();
-                _response.Result = _mapper.Map<ProductDto>(obj);
+                _response.Result = MapProductToProductDto(obj);
             }
             catch (Exception ex)
             {
@@ -137,6 +148,7 @@ namespace Mango.ProductAPI.Controllers
                     _response.ErrorMessage = "Product not found.";
                     return NotFound(_response);
                 }
+                DeleteProductImage(product);
                 _db.Products.Remove(product);
                 await _db.SaveChangesAsync();
             }
@@ -150,7 +162,16 @@ namespace Mango.ProductAPI.Controllers
 
         }
 
-
+        private ProductDto MapProductToProductDto(Product product)
+        {
+            var productDto = _mapper.Map<ProductDto>(product);
+            if (!string.IsNullOrEmpty(product.ImageFileName))
+            {
+                var baseUrl = $"{Request.Scheme}://{Request.Host.Value}{Request.PathBase.Value}";
+                productDto.ImageUrl = $"{baseUrl}/ProductImages/{product.ImageFileName}";
+            }
+            return productDto;
+        }
 
 
         private async Task<string> SaveProductImageAsync(IFormFile image)
