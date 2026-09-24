@@ -1,7 +1,7 @@
-﻿using Mango.Services.ProductAPI.Models;
+﻿using Mango.ProductAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Mango.Services.ProductAPI.Data
+namespace Mango.ProductAPI.Data
 {
     public class ApplicationDbContext : DbContext
     {

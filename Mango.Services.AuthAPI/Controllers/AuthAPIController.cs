@@ -1,10 +1,10 @@
 ﻿using Mango.Serives.Shared.Models;
-using Mango.Services.AuthAPI.Models;
-using Mango.Services.AuthAPI.Service.IService;
+using Mango.AuthAPI.Models;
+using Mango.AuthAPI.Service.IService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Mango.Services.AuthAPI.Controllers
+namespace Mango.AuthAPI.Controllers
 {
     [Route("api/auth")]
     [ApiController]

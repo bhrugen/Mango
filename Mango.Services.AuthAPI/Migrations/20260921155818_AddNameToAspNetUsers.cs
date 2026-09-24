@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Mango.Services.AuthAPI.Migrations;
+namespace Mango.AuthAPI.Migrations;
 
 /// <inheritdoc />
 public partial class _20260921155818_AddNameToAspNetUsers : Migration

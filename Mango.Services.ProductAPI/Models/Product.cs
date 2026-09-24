@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Mango.Services.ProductAPI.Models
+namespace Mango.ProductAPI.Models
 {
     public class Product
     {

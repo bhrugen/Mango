@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Mango.Services.AuthAPI.Migrations;
+namespace Mango.AuthAPI.Migrations;
 
 [DbContext(typeof(ApplicationDbContext))]
 partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -27,7 +27,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
 
         SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-        modelBuilder.Entity("Mango.Services.AuthAPI.Models.ApplicationUser", b =>
+        modelBuilder.Entity("Mango.AuthAPI.Models.ApplicationUser", b =>
             {
                 b.Property<string>("Id")
                     .HasColumnType("nvarchar(450)");
@@ -239,7 +239,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
 
         modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
             {
-                b.HasOne("Mango.Services.AuthAPI.Models.ApplicationUser", null)
+                b.HasOne("Mango.AuthAPI.Models.ApplicationUser", null)
                     .WithMany()
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
@@ -248,7 +248,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
 
         modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
             {
-                b.HasOne("Mango.Services.AuthAPI.Models.ApplicationUser", null)
+                b.HasOne("Mango.AuthAPI.Models.ApplicationUser", null)
                     .WithMany()
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
@@ -263,7 +263,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
-                b.HasOne("Mango.Services.AuthAPI.Models.ApplicationUser", null)
+                b.HasOne("Mango.AuthAPI.Models.ApplicationUser", null)
                     .WithMany()
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
@@ -272,7 +272,7 @@ partial class ApplicationDbContextModelSnapshot : ModelSnapshot
 
         modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
             {
-                b.HasOne("Mango.Services.AuthAPI.Models.ApplicationUser", null)
+                b.HasOne("Mango.AuthAPI.Models.ApplicationUser", null)
                     .WithMany()
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)

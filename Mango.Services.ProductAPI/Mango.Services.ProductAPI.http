@@ -1,11 +1,11 @@
-@Mango.Services.ProductAPI_HostAddress = http://localhost:5128
+@Mango.ProductAPI_HostAddress = http://localhost:5128
 
-GET {{Mango.Services.ProductAPI_HostAddress}}/openapi/v1.json
+GET {{Mango.ProductAPI_HostAddress}}/openapi/v1.json
 Accept: application/json
 
 ###
 
-GET {{Mango.Services.ProductAPI_HostAddress}}/weatherforecast/
+GET {{Mango.ProductAPI_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###

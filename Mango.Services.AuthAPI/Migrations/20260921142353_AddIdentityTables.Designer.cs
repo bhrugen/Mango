@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Mango.Services.AuthAPI.Migrations;
+namespace Mango.AuthAPI.Migrations;
 
 [DbContext(typeof(ApplicationDbContext))]
 [Migration("20260921142353_AddIdentityTables")]
