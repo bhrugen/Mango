@@ -82,11 +82,17 @@
                 <div class="card-header bg-secondary text-white">
                     <i class="bi bi-image me-2"></i>Photo Preview
                 </div>
-                <div id="previewImgWrap" style="height:200px; overflow:hidden;">
+                <div id="previewImgWrap" >
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img src="@Model.ImageUrl" alt="@Model.Name" style="width:100%" />
+                    }
+                    else
+                    {
                         <div class="h-100 bg-light d-flex align-items-center justify-content-center">
                             <i class="bi bi-camera text-secondary" style="font-size:3rem;"></i>
                         </div>
-                   
+                    }
                 </div>
             </div>
         </div>
@@ -103,7 +109,7 @@
         const reader = new FileReader();
         reader.onload = e => {
             document.getElementById('previewImgWrap').innerHTML =
-                `<img src="${e.target.result}" class="w-100" style="height:200px;object-fit:cover;" alt="preview">`;
+                `<img src="${e.target.result}" class="w-100" style="width:100%" alt="preview">`;
         };
         reader.readAsDataURL(file);
     });

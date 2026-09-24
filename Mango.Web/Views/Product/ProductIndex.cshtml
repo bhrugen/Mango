@@ -27,8 +27,15 @@
                 {
                     <tr>
                         <td class="align-middle" style="width:64px;">
-                            <img src="https://placehold.co/50" alt="Mango Chicken Tikka" style="width:48px;height:48px;object-fit:cover;border-radius:6px;" />
-                        </td>
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <img src="@item.ImageUrl" alt="@item.Name" style="width:48px;height:48px;object-fit:cover;border-radius:6px;" />
+                            }
+                            else
+                            {
+                                <img src="https://placehold.co/50" style="width:48px;height:48px;object-fit:cover;border-radius:6px;" />
+                            }
+                        </td> 
                         <td class="align-middle fw-semibold" style="font-family:Georgia,serif;">@item.Name</td>
                         <td class="align-middle"><span class="menu-card-category">@item.CategoryName</span></td>
                         <td class="align-middle"><span class="price-tag-sm">@item.Price.ToString("c")</span></td>
