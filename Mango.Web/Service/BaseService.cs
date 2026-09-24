@@ -1,6 +1,7 @@
 ﻿using Mango.Web.Models;
 using Mango.Web.Service.IService;
 using Mango.Web.Utility;
+using Microsoft.AspNetCore.Http;
 using System.Text;
 using System.Text.Json;
 
@@ -36,7 +37,14 @@ namespace Mango.Web.Service
                     }
                 }
 
-                if (requestDto.Data != null)
+                if (requestDto.ContentType == SD.ContentType.MultipartFormData)
+                {
+                    if (requestDto.Data != null)
+                    {
+                        message.Content = BuildMultipartContent(requestDto.Data);
+                    }
+                }
+                else if (requestDto.Data != null)
                 {
                     message.Content = new StringContent(JsonSerializer.Serialize(requestDto.Data), Encoding.UTF8, "application/json");
                 }
@@ -84,6 +92,28 @@ namespace Mango.Web.Service
                 };
                 return dto;
             }
+        }
+
+        private static MultipartFormDataContent BuildMultipartContent(object data)
+        {
+            var form = new MultipartFormDataContent();
+            foreach (var prop in data.GetType().GetProperties())
+            {
+                var value = prop.GetValue(data);
+                if (value == null) continue;
+
+                if (value is IFormFile file)
+                {
+                    var streamContent = new StreamContent(file.OpenReadStream());
+                    streamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+                    form.Add(streamContent, prop.Name, file.FileName);
+                }
+                else
+                {
+                    form.Add(new StringContent(value.ToString() ?? string.Empty), prop.Name);
+                }
+            }
+            return form;
         }
     }
 }
