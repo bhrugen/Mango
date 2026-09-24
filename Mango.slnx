@@ -6,5 +6,6 @@
     <Project Path="Mango.CouponAPI/Mango.CouponAPI.csproj" Id="604e40d8-0ee4-469c-9bc1-a726f3855782" />
     <Project Path="Mango.Serives.Shared/Mango.Serives.Shared.csproj" Id="ea71aec3-5ade-4a19-aba6-fc1143ae82f8" />
     <Project Path="Mango.Services.AuthAPI/Mango.Services.AuthAPI.csproj" Id="9ec678f3-f7aa-4c91-be52-e959ae55dbca" />
+    <Project Path="Mango.Services.ProductAPI/Mango.Services.ProductAPI.csproj" Id="edf34fcc-6d36-425a-9bd8-af7b2aaff6da" />
   </Folder>
 </Solution>
