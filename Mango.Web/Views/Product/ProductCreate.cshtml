@@ -1,3 +1,4 @@
+@model ProductDto
 <div class="container py-4">
 
     <!-- Page Header -->
@@ -6,7 +7,7 @@
             <div class="section-label"><span>Admin</span></div>
             <h2 class="section-title mb-0">Add New Dish</h2>
         </div>
-        <a href="#" class="btn btn-outline-secondary">
+        <a asp-action="ProductIndex" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left me-1"></i>Back
         </a>
     </div>
@@ -24,39 +25,39 @@
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Dish Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control"
+                            <input asp-for="Name" class="form-control"
                                    placeholder="e.g. Mango Chicken Tikka" />
-                            <span class="text-danger small"></span>
+                            <span asp-validation-for="Name" class="text-danger small"></span>
                         </div>
 
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Category <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control"
+                                <input asp-for="CategoryName" class="form-control"
                                        placeholder="e.g. Main Course" />
-                                <span class="text-danger small"></span>
+                                <span asp-validation-for="CategoryName" class="text-danger small"></span>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Price <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="number" step="0.01" class="form-control" placeholder="0.00" />
+                                    <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="0.00" />
                                 </div>
-                                <span class="text-danger small"></span>
+                                <span asp-validation-for="Price" class="text-danger small"></span>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Description</label>
-                            <textarea class="form-control" rows="4"
+                            <textarea asp-for="Description" class="form-control" rows="4"
                                       placeholder="Describe the dish..."></textarea>
-                            <span class="text-danger small"></span>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label fw-semibold">Dish Photo</label>
-                            <input type="file" id="imageInput" class="form-control" accept="image/*" />
-                            <span class="text-danger small"></span>
+                            <input asp-for="ImageFileName" type="file" id="imageInput" class="form-control" accept="image/*" />
+                            <span asp-validation-for="ImageFileName" class="text-danger small"></span>
                             <div class="form-text">Accepted: JPG, PNG, WEBP.</div>
                         </div>
 
