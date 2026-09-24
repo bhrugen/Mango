@@ -109,14 +109,17 @@ namespace Mango.ProductAPI.Controllers
         {
             try
             {
-                Product obj = _mapper.Map<Product>(productDto);
-                if (obj.ProductId == 0)
+                Product obj = await _db.Products.FindAsync(productDto.ProductId);
+                if (obj==null || obj.ProductId == 0)
                 {
                     _response.IsSuccess = false;
-                    _response.ErrorMessage = "ProductId is required for update.";
+                    _response.ErrorMessage = "Product Not Found.";
                     return BadRequest(_response);
                 }
-                _db.Products.Update(obj);
+                obj.Name = productDto.Name;
+                obj.Price = productDto.Price;
+                obj.Description = productDto.Description;
+                obj.CategoryName = productDto.CategoryName;
                 if (productDto.Image != null)
                 {
                     DeleteProductImage(obj);
