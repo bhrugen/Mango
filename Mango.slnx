@@ -7,5 +7,6 @@
     <Project Path="Mango.Serives.Shared/Mango.Serives.Shared.csproj" Id="ea71aec3-5ade-4a19-aba6-fc1143ae82f8" />
     <Project Path="Mango.Services.AuthAPI/Mango.AuthAPI.csproj" Id="9ec678f3-f7aa-4c91-be52-e959ae55dbca" />
     <Project Path="Mango.Services.ProductAPI/Mango.ProductAPI.csproj" Id="edf34fcc-6d36-425a-9bd8-af7b2aaff6da" />
+    <Project Path="Mango.ShoppingCart/Mango.ShoppingCartAPI.csproj" Id="f4d248b5-75ad-4ba0-b8cb-96577ffcf1bc" />
   </Folder>
 </Solution>

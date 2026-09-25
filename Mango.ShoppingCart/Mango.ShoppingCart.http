@@ -1,0 +1,11 @@
+@Mango.ShoppingCart_HostAddress = http://localhost:5118
+
+GET {{Mango.ShoppingCart_HostAddress}}/openapi/v1.json
+Accept: application/json
+
+###
+
+GET {{Mango.ShoppingCart_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
