@@ -10,6 +10,8 @@ namespace Mango.ShoppingCartAPI.Models.Dto
         public string? UserId { get; set; }
         [MaxLength(100)]
         public string? CouponCode { get; set; }
+        public double Discount { get; set; }
+        public double CartTotal { get; set; }
 
     }
 }

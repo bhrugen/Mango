@@ -25,6 +25,40 @@ namespace Mango.ShoppingCartAPI.Controllers
             _mapper = mapper;
             _response = new ResponseDto();
         }
+        [HttpGet("GetCart/{userId}", Name = "GetCart")]
+        public async Task<ActionResult<ResponseDto>> GetCart(string userId)
+        {
+            try
+            {
+                var cartHeaderFromdb = await _db.CartHeaders.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == userId);
+                if (cartHeaderFromdb == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessage = "Cart header not found for the user.";
+                    return NotFound(_response);
+                }
+                else
+                {
+                    CartDto cartDto = new CartDto
+                    {
+                        CartHeader = _mapper.Map<CartHeaderDto>(cartHeaderFromdb),
+                        CartDetails = _mapper.Map<List<CartDetailsDto>>(await _db.CartDetails.AsNoTracking().Where(u => u.CartHeaderId == cartHeaderFromdb.CartHeaderId).ToListAsync())
+                    };
+
+                    _response.Result = cartDto;
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessage = ex.Message;
+            }
+            if (!_response.IsSuccess) return BadRequest(_response);
+            return Ok(_response);
+        }
+
+
+
 
         [HttpPost("ApplyCoupon", Name = "ApplyCoupon")]
         public async Task<ActionResult<ResponseDto>> ApplyCoupon([FromBody] CartDto cartDto)
