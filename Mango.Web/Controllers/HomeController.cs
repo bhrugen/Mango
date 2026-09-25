@@ -8,20 +8,21 @@ namespace Mango.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ICouponService _couponService;
-        public HomeController(ICouponService couponService)
+        private readonly IProductService _productService;
+        public HomeController(IProductService productService)
         {
-            _couponService = couponService;
+            _productService = productService;
         }
         public async Task<IActionResult> Index()
         {
-            ResponseDto? responseDto = await _couponService.GetAllCouponsAsync();
+            ResponseDto? responseDto = await _productService.GetAllProductsAsync();
             if (responseDto != null && responseDto.IsSuccess)
             {
                 // Handle the successful response
-                List<CouponDto>? coupons = JsonConvert.DeserializeObject<List<CouponDto>>(Convert.ToString(responseDto.Result));
+                List<ProductDto>? products = JsonConvert.DeserializeObject<List<ProductDto>>(Convert.ToString(responseDto.Result));
+                return View(products);
             }
-            return View();
+            return View(new List<ProductDto>());
         }
 
         public IActionResult Privacy()

@@ -1,0 +1,131 @@
+<!-- Sample product below. Replace hardcoded values with the real product's data. -->
+<div class="fade-in-up" style="max-width:960px;margin:0 auto;">
+    <form method="post">
+        <input type="hidden" name="ProductId" value="1" />
+
+        <div class="card overflow-hidden">
+            <div class="row g-0">
+
+                <!-- ===== DISH IMAGE ===== -->
+                <div class="col-lg-5">
+                    <div class="position-relative h-100" style="min-height:380px;">
+                        <img src="https://placehold.co/600x400" alt="Sample Dish"
+                             style="width:100%;height:100%;object-fit:cover;min-height:380px;" />
+
+                        <!-- Gradient overlay -->
+                        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.65) 0%,transparent 55%);pointer-events:none;"></div>
+
+                        <!-- Category chip -->
+                        <div style="position:absolute;top:1rem;left:1rem;">
+                            <span class="menu-card-badge">
+                                <i class="bi bi-tag-fill me-1"></i>Category
+                            </span>
+                        </div>
+
+                        <!-- Price -->
+                        <div style="position:absolute;bottom:1.25rem;left:1.25rem;">
+                            <span style="font-family:Georgia,serif;font-size:2rem;font-weight:800;color:white;text-shadow:0 2px 10px rgba(0,0,0,.6);">
+                                $9.99
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== DISH INFO ===== -->
+                <div class="col-lg-7">
+                    <div class="card-body p-4">
+
+                        <h1 style="font-family:Georgia,serif;font-size:1.8rem;font-weight:700;line-height:1.2;margin-bottom:.5rem;">
+                            Sample Dish
+                        </h1>
+
+                        <!-- Rating row -->
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <div>
+                                <i class="bi bi-star-fill" style="color:var(--brand-primary);font-size:.875rem;"></i>
+                                <i class="bi bi-star-fill" style="color:var(--brand-primary);font-size:.875rem;"></i>
+                                <i class="bi bi-star-fill" style="color:var(--brand-primary);font-size:.875rem;"></i>
+                                <i class="bi bi-star-fill" style="color:var(--brand-primary);font-size:.875rem;"></i>
+                                <i class="bi bi-star-half" style="color:var(--brand-primary);font-size:.875rem;"></i>
+                            </div>
+                            <span class="small text-muted">4.5 &middot; 128 reviews</span>
+                            <span class="badge bg-success ms-1">
+                                <i class="bi bi-check-circle me-1"></i>Available
+                            </span>
+                        </div>
+
+                        <hr class="my-3" />
+
+                        <!-- Description -->
+                        <p class="text-muted mb-4" style="line-height:1.75;font-size:.9375rem;">
+                            Sample description goes here.
+                        </p>
+
+                        <!-- Highlights -->
+                        <div class="row g-2 mb-4">
+                            <div class="col-6">
+                                <div class="trust-badge" style="padding:.5rem .75rem;">
+                                    <i class="bi bi-fire" style="color:var(--brand-primary);"></i>
+                                    <span class="small fw-semibold">Freshly Prepared</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="trust-badge" style="padding:.5rem .75rem;">
+                                    <i class="bi bi-leaf" style="color:var(--restaurant-green);"></i>
+                                    <span class="small fw-semibold">Fresh Ingredients</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="trust-badge" style="padding:.5rem .75rem;">
+                                    <i class="bi bi-clock" style="color:var(--brand-primary);"></i>
+                                    <span class="small fw-semibold">~20 Min Ready</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="trust-badge" style="padding:.5rem .75rem;">
+                                    <i class="bi bi-shield-check" style="color:var(--restaurant-green);"></i>
+                                    <span class="small fw-semibold">Hygiene Certified</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quantity -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold small text-uppercase" style="letter-spacing:.5px;">
+                                Quantity
+                            </label>
+                            <div class="quantity-selector">
+                                <button type="button" id="decrementBtn">&#8722;</button>
+                                <input type="number" name="Count" min="1" value="1" id="quantityInput" />
+                                <button type="button" id="incrementBtn">+</button>
+                            </div>
+                            <span class="text-danger small"></span>
+                        </div>
+
+                        <!-- CTA -->
+                        <div class="d-flex gap-3 flex-wrap">
+                            <button type="submit" class="btn btn-gold px-4">
+                                <i class="bi bi-bag-plus me-2"></i>Add to Order
+                            </button>
+                            <a href="/Home/Index" class="btn btn-outline-secondary px-4">
+                                <i class="bi bi-arrow-left me-2"></i>Back to Menu
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    const input = document.getElementById('quantityInput');
+    document.getElementById('incrementBtn').addEventListener('click', function () {
+        input.value = parseInt(input.value) + 1;
+    });
+    document.getElementById('decrementBtn').addEventListener('click', function () {
+        if (parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;
+    });
+</script>
