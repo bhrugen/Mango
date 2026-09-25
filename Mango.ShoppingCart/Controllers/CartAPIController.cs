@@ -4,6 +4,7 @@ using Mango.ShoppingCartAPI.Data;
 using Mango.ShoppingCartAPI.Migrations;
 using Mango.ShoppingCartAPI.Models;
 using Mango.ShoppingCartAPI.Models.Dto;
+using Mango.ShoppingCartAPI.Service.IService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +19,16 @@ namespace Mango.ShoppingCartAPI.Controllers
         private readonly ApplicationDbContext _db;
         private ResponseDto _response;
         private IMapper _mapper;
+        private IProductService _productService;
+        private ICouponService _couponService;
 
-        public CartAPIController(ApplicationDbContext db, IMapper mapper)
+        public CartAPIController(ApplicationDbContext db, IMapper mapper, IProductService productService, ICouponService couponService)
         {
             _db = db;
             _mapper = mapper;
             _response = new ResponseDto();
+            _productService = productService;
+            _couponService = couponService;
         }
         [HttpGet("GetCart/{userId}", Name = "GetCart")]
         public async Task<ActionResult<ResponseDto>> GetCart(string userId)
@@ -44,6 +49,18 @@ namespace Mango.ShoppingCartAPI.Controllers
                         CartHeader = _mapper.Map<CartHeaderDto>(cartHeaderFromdb),
                         CartDetails = _mapper.Map<List<CartDetailsDto>>(await _db.CartDetails.AsNoTracking().Where(u => u.CartHeaderId == cartHeaderFromdb.CartHeaderId).ToListAsync())
                     };
+
+                    IEnumerable<ProductDto> productDtos = await _productService.GetProducts();
+                    foreach(var item in cartDto.CartDetails){
+                        item.Product = productDtos.FirstOrDefault(p => p.ProductId == item.ProductId);
+                        if (item.Product != null)
+                        {
+                            cartDto.CartHeader.CartTotal += (item.Count * item.Product.Price);
+                        }
+                    }
+
+                    //apply coupon
+
 
                     _response.Result = cartDto;
                 }

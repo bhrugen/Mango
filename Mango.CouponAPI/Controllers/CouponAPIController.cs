@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 [Route("api/coupons")]
 [ApiController]
-[Authorize(Roles ="ADMIN")]
+//[Authorize(Roles ="ADMIN")]
 public class CouponAPIController : ControllerBase
 {
     private readonly ApplicationDbContext _db;
