@@ -1,5 +1,7 @@
 using Mango.Serives.Shared.Extensions;
 using Mango.ShoppingCartAPI.Data;
+using Mango.ShoppingCartAPI.Models;
+using Mango.ShoppingCartAPI.Models.Dto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
@@ -17,7 +19,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddAutoMapper(o =>
 {
-    
+    o.CreateMap<CartHeader, CartHeaderDto>().ReverseMap();
+    o.CreateMap<CartDetails, CartDetailsDto>().ReverseMap();
 });
 
 builder.AddJwtAuthentication();

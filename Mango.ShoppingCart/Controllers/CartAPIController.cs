@@ -56,10 +56,19 @@ namespace Mango.ShoppingCartAPI.Controllers
                         }
                         else
                         {
+                            
                             cartDetailsDto.Count += cartDetailsFromDb.Count;
-                            cartDetailsDto.CartHeaderId = cartHeaderFromdb.CartHeaderId;
+                            
+                                cartDetailsDto.CartHeaderId = cartHeaderFromdb.CartHeaderId;
                             cartDetailsDto.CartDetailsId = cartDetailsFromDb.CartDetailsId;
-                            _db.CartDetails.Update(_mapper.Map<CartDetails>(cartDetailsDto));
+                            if (cartDetailsDto.Count <= 0)
+                            {
+                                _db.CartDetails.Remove(_mapper.Map<CartDetails>(cartDetailsDto));
+                            }
+                            else
+                            {
+                                _db.CartDetails.Update(_mapper.Map<CartDetails>(cartDetailsDto));
+                            }
                             await _db.SaveChangesAsync();
                         }
                     }
