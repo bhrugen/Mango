@@ -26,6 +26,68 @@ namespace Mango.ShoppingCartAPI.Controllers
             _response = new ResponseDto();
         }
 
+        [HttpPost("ApplyCoupon", Name = "ApplyCoupon")]
+        public async Task<ActionResult<ResponseDto>> ApplyCoupon([FromBody] CartDto cartDto)
+        {
+            try
+            {
+                var cartHeaderFromdb = await _db.CartHeaders.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == cartDto.CartHeader.UserId);
+                if (cartHeaderFromdb != null)
+                {
+                    cartHeaderFromdb.CouponCode = cartDto.CartHeader.CouponCode;
+                    _db.CartHeaders.Update(cartHeaderFromdb);
+                    await _db.SaveChangesAsync();
+
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessage = "Cart header not found for the user.";
+                    return NotFound(_response);
+                }
+               
+                _response.Result = cartDto;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessage = ex.Message;
+            }
+            if (!_response.IsSuccess) return BadRequest(_response);
+            return Ok(_response);
+        }
+
+        [HttpPost("RemoveCartDetails", Name = "RemoveCartDetails")]
+        public async Task<ActionResult<ResponseDto>> RemoveCartDetails([FromBody] int cartDetailsId)
+        {
+            try
+            {
+               CartDetails cartDetails = await _db.CartDetails.FirstOrDefaultAsync(u => u.CartDetailsId == cartDetailsId);
+                if (cartDetails != null)
+                {
+                    _db.CartDetails.Remove(cartDetails);
+                    await _db.SaveChangesAsync();
+
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessage = "Cart details not found for the user.";
+                    return NotFound(_response);
+                }
+
+                _response.Result = true;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessage = ex.Message;
+            }
+            if (!_response.IsSuccess) return BadRequest(_response);
+            return Ok(_response);
+        }
+
+
         [HttpPost("CartUpsert", Name = "CartUpsert")]
         public async Task<ActionResult<ResponseDto>> CartUpsert([FromBody] CartDto cartDto)
         {
