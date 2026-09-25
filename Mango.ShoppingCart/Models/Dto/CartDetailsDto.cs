@@ -2,18 +2,16 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Mango.ShoppingCartAPI.Models
+namespace Mango.ShoppingCartAPI.Models.Dto
 {
     public class CartDetailsDto
     {
-        [Key]
+        [Required]
         public int CartDetailsId { get; set; }
         public int CartHeaderId { get; set; }
-        [ForeignKey("CartHeaderId")]
         public CartHeaderDto CartHeader { get; set; }
 
         public int ProductId { get; set; }
-        [NotMapped]
         public ProductDto? Product { get; set; }
 
         [Range(1, 100, ErrorMessage = "Count must be between 1 and 100.")]

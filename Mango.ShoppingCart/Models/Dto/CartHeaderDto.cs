@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Mango.ShoppingCartAPI.Models
+namespace Mango.ShoppingCartAPI.Models.Dto
 {
     public class CartHeaderDto
     {
-        [Key]
+        [Required]
         public int CartHeaderId { get; set; }
         [Required]
         public string? UserId { get; set; }
