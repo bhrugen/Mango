@@ -60,7 +60,15 @@ namespace Mango.ShoppingCartAPI.Controllers
                     }
 
                     //apply coupon
-
+                    if(!string.IsNullOrEmpty(cartDto.CartHeader.CouponCode))
+                    {
+                        CouponDto coupon = await _couponService.GetCoupon(cartDto.CartHeader.CouponCode);
+                        if(coupon != null && cartDto.CartHeader.CartTotal > coupon.MinAmount)
+                        {
+                            cartDto.CartHeader.CartTotal -= coupon.DiscountAmount;
+                            cartDto.CartHeader.Discount = coupon.DiscountAmount;
+                        }
+                    }
 
                     _response.Result = cartDto;
                 }
