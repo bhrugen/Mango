@@ -54,6 +54,18 @@ namespace Mango.Web.Controllers
         }
 
 
+        public async Task<IActionResult> ApplyCoupon(CartDto cartDto)
+        {
+            cartDto.CartHeader.UserId = User.Claims.Where(u => u.Type == "sub").FirstOrDefault()?.Value;
+            ResponseDto? responseDto = await _cartService.ApplyCouponAsync(cartDto);
+            if (responseDto != null && responseDto.IsSuccess)
+            {
+                TempData["success"] = "Cart updated successfully";
+            }
+            return RedirectToAction(nameof(CartIndex));
+        }
+
+
         private async Task<CartDto> LoadCartByLoggedInUser()
         {
             var UserId = User.Claims.Where(u => u.Type == "sub").FirstOrDefault()?.Value;

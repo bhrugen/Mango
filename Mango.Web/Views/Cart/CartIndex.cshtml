@@ -96,15 +96,15 @@
 
                 <!-- Promo Code — inline strip -->
                 <div class="fade-in-up px-1">
-                    <form action="/Cart/ApplyCoupon" method="post">
-                        <input type="hidden" name="CartHeader.UserId" value="" />
-                        <input type="hidden" name="CartHeader.CartHeaderId" value="1" />
+                    <form asp-action="ApplyCoupon" method="post">
+                        <input type="hidden" asp-for="CartHeader.UserId" value="" />
+                        <input type="hidden" asp-for="CartHeader.CartHeaderId" value="1" />
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-transparent border-end-0"
                             style="border-color:var(--border-warm);">
                                 <i class="bi bi-ticket-perforated" style="color:var(--brand-primary);"></i>
                             </span>
-                            <input name="CartHeader.CouponCode" class="form-control border-start-0"
+                            <input asp-for="CartHeader.CouponCode" class="form-control border-start-0"
                             placeholder="Promo code"
                             style="border-color:var(--border-warm);font-size:.85rem;" />
                             <button type="submit" class="btn btn-gold btn-sm px-3">Apply</button>
