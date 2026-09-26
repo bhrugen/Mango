@@ -60,7 +60,7 @@
                         </a>
                         <button type="button"
                         class="btn btn-gold w-100 btn-add-to-cart"
-                        data-product-id="1">
+                        data-product-id="@product.ProductId">
                             <i class="bi bi-bag-plus me-1"></i>Add to Cart
                         </button>
                     </div>
@@ -129,8 +129,17 @@
 
         try {
             // TODO: dummy call for now, replace with real fetch to AddToCart
-            const data = { success: true, message: 'Added to cart' };
 
+            const response = await fetch('@Url.Action("AddToCart","Home")',{
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productId)
+            });
+            
+            const data = await response.json();
+            console.log(data);
             if (data.success) {
                 toastr.success(data.message);
                 btn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Added!';

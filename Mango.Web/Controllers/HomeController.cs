@@ -71,6 +71,36 @@ namespace Mango.Web.Controllers
             return View(productDto);
         }
 
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddToCart([FromBody] int productId)
+        {
+            CartDto cartDto = new CartDto
+            {
+                CartHeader = new CartHeaderDto
+                {
+                    UserId = User.Claims.Where(u => u.Type == "sub").FirstOrDefault()?.Value
+                }
+            };
+
+            CartDetailsDto cartDetailsDto = new CartDetailsDto
+            {
+                Count = 1,
+                ProductId = productId
+            };
+
+            cartDto.CartDetails = new List<CartDetailsDto> { cartDetailsDto };
+
+            ResponseDto? responseDto = await _cartService.UpsertCartAsync(cartDto);
+            if (responseDto != null && responseDto.IsSuccess)
+            {
+                // Handle the successful response
+                return Json(new { success = true, message = "Item added to cart!" });
+            }
+            return Json(new { success=false, message = responseDto.ErrorMessage??"Could not add item to cart"});
+        }
+
         public IActionResult Privacy()
         {
             return View();
