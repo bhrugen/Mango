@@ -52,8 +52,8 @@
                                         <h6 style="font-family:Georgia,serif;font-weight:700;margin-bottom:.25rem;">
                                            @item.Product.Name
                                         </h6>
-                                        <form action="/Cart/Remove" method="post" class="d-inline">
-                                            <input type="hidden" name="cartDetailsId" value="1" />
+                                        <form asp-action="Remove" method="post" class="d-inline">
+                                            <input type="hidden" name="cartDetailsId" value="@item.CartDetailsId" />
                                             <button type="submit" class="btn btn-link p-0 text-danger"
                                             style="font-size:.8rem;text-decoration:none;">
                                                 <i class="bi bi-x-circle me-1"></i>Remove
@@ -67,15 +67,17 @@
                                     <div class="col-4 col-md-2 text-center">
                                         <div class="text-muted small mb-1">Qty</div>
                                         <div class="d-flex align-items-center justify-content-center gap-1">
-                                            <form action="/Cart/UpdateCount" method="post" class="d-inline">
-                                                <input type="hidden" name="cartDetailsId" value="1" />
+                                            <form asp-action="UpdateCount" method="post" class="d-inline">
+                                                <input type="hidden" name="cartDetailsId" value="@item.CartDetailsId" />
+                                                <input type="hidden" name="productId" value="@item.ProductId" />
                                                 <input type="hidden" name="change" value="-1" />
                                                 <button type="submit" class="btn btn-sm btn-outline-secondary px-2 py-0"
                                                 style="line-height:1.4;">&#8722;</button>
                                             </form>
                                             <span class="fw-semibold px-1">@item.Count</span>
-                                            <form action="/Cart/UpdateCount" method="post" class="d-inline">
-                                                <input type="hidden" name="cartDetailsId" value="1" />
+                                            <form asp-action="UpdateCount" method="post" class="d-inline">
+                                                <input type="hidden" name="cartDetailsId" value="@item.CartDetailsId" />
+                                                <input type="hidden" name="productId" value="@item.ProductId" />
                                                 <input type="hidden" name="change" value="1" />
                                                 <button type="submit" class="btn btn-sm btn-outline-secondary px-2 py-0"
                                                 style="line-height:1.4;">+</button>
