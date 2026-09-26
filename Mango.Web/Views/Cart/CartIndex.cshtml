@@ -120,6 +120,7 @@
                                 }
                         </div>
                     </form>
+                   
                 </div>
 
             </div>
@@ -127,7 +128,28 @@
             <!-- RIGHT: Contact Details + Summary -->
             <div class="col-lg-4">
                 <div style="position:sticky;top:20px;">
+                    <!-- Order Summary -->
+                    <div class="card mb-3 fade-in-up">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted small">Sub Total</span>
+                                <span class="fw-semibold">@((Model.CartHeader.CartTotal + Model.CartHeader.Discount).ToString("c"))</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2 text-success">
+                                <span class="small"><i class="bi bi-tag-fill me-1"></i>Discount </span>
+                                <span class="fw-semibold">@Model.CartHeader.Discount.ToString("c")</span>
+                            </div>
+                            <hr />
+                            <div class="d-flex justify-content-between">
+                                <span style="font-family:Georgia,serif;font-weight:700;">Total</span>
+                                <span style="font-family:Georgia,serif;font-weight:700;color:var(--brand-primary);">
+                                    @Model.CartHeader.CartTotal.ToString("c")
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
+                    
                     <!-- Contact Details -->
                     <div class="card mb-3 fade-in-up">
                         <div class="card-header">
@@ -137,25 +159,21 @@
                         </div>
                         <div class="card-body">
                             <form action="/Cart/Checkout" method="post" id="checkoutForm">
-                                <input type="hidden" name="CartHeader.UserId" value="" />
-                                <input type="hidden" name="CartHeader.CartHeaderId" value="1" />
-                                <input type="hidden" name="CartHeader.CouponCode" value="" />
-                                <input type="hidden" name="CartHeader.Discount" value="0" />
-                                <input type="hidden" name="CartHeader.CartTotal" value="22.98" />
+                            
                                 <div class="mb-3">
                                     <label class="form-label"><i class="bi bi-person me-1 text-gold"></i>Full Name</label>
-                                    <input name="CartHeader.Name" class="form-control" placeholder="Your full name" />
-                                    <span class="text-danger small"></span>
+                                    <input asp-for="Name" class="form-control" placeholder="Your full name" />
+                                    <span asp-validation-for="Name" class="text-danger small"></span>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label"><i class="bi bi-envelope me-1 text-gold"></i>Email</label>
-                                    <input name="CartHeader.Email" class="form-control" placeholder="you@example.com" />
-                                    <span class="text-danger small"></span>
+                                    <input asp-for="Email" class="form-control" placeholder="you@example.com" />
+                                    <span asp-validation-for="Email" class="text-danger small"></span>
                                 </div>
                                 <div class="mb-0">
                                     <label class="form-label"><i class="bi bi-telephone me-1 text-gold"></i>Phone</label>
-                                    <input name="CartHeader.Phone" class="form-control" placeholder="+1 555 000 0000" />
-                                    <span class="text-danger small"></span>
+                                    <input asp-for="Phone" class="form-control" placeholder="+1 555 000 0000" />
+                                    <span asp-validation-for="Phone" class="text-danger small"></span>
                                 </div>
                             </form>
                         </div>
@@ -164,7 +182,7 @@
                     <!-- Action Buttons -->
                     <div class="d-grid gap-2 fade-in-up">
                         <button type="submit" form="checkoutForm" class="btn btn-gold btn-lg">
-                            <i class="bi bi-check-circle me-2"></i>Confirm Order &mdash; $22.98
+                            <i class="bi bi-check-circle me-2"></i>Confirm Order &mdash; @Model.CartHeader.CartTotal.ToString("c")
                         </button>
                         <form action="/Cart/EmailCart" method="post">
                             <input type="hidden" name="CartHeader.UserId" value="" />
@@ -209,4 +227,9 @@ else
         </a>
     </div>
 
+}
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
