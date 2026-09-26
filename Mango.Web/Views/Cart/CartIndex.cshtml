@@ -104,10 +104,20 @@
                             style="border-color:var(--border-warm);">
                                 <i class="bi bi-ticket-perforated" style="color:var(--brand-primary);"></i>
                             </span>
-                            <input asp-for="CartHeader.CouponCode" class="form-control border-start-0"
+                            @if (!string.IsNullOrEmpty(Model.CartHeader.CouponCode))
+                                {
+                                    <input type="hidden" asp-for="CartHeader.CouponCode" value="" />
+                                <input disabled value="@Model.CartHeader.CouponCode" class="form-control border-start-0"
+                                       placeholder="Promo code"
+                                       style="border-color:var(--border-warm);font-size:.85rem;" />
+                                <button type="submit" class="btn btn-gold btn-sm px-3">Remove</button>
+                                }
+                                else{
+                                <input asp-for="CartHeader.CouponCode" class="form-control border-start-0"
                             placeholder="Promo code"
                             style="border-color:var(--border-warm);font-size:.85rem;" />
                             <button type="submit" class="btn btn-gold btn-sm px-3">Apply</button>
+                                }
                         </div>
                     </form>
                 </div>
