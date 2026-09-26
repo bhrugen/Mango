@@ -77,6 +77,13 @@ namespace Mango.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+
         private async Task SignInUser(LoginResponseDto model)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
