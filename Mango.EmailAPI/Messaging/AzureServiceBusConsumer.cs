@@ -23,7 +23,10 @@ namespace Mango.EmailAPI.Messaging
                 ?? throw new InvalidOperationException("Missing configuration value: EmailShoppingCartQueue");
 
             var client = new ServiceBusClient(serviceBusConnectionString);
-            _emailCartProcessor = client.CreateProcessor(emailCartQueue);
+            _emailCartProcessor = client.CreateProcessor(emailCartQueue, new ServiceBusProcessorOptions
+            {
+                AutoCompleteMessages = false
+            });
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
