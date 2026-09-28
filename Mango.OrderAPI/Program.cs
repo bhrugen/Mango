@@ -25,6 +25,12 @@ builder.Services.AddAutoMapper(o =>
 {
     o.CreateMap<OrderHeaderDto, OrderHeader>().ReverseMap();
     o.CreateMap<OrderDetailsDto, OrderDetails>().ReverseMap();
+
+    o.CreateMap<OrderHeaderDto,CartHeaderDto>().ForMember(dest=>dest.CartTotal, opt=>opt.MapFrom(src=>src.OrderTotal)).ReverseMap();
+    o.CreateMap<CartDetailsDto,OrderDetailsDto>()
+    .ForMember(dest=>dest.ProductName,u=>u.MapFrom(src=>src.Product.Name))
+    .ForMember(dest => dest.Price, u => u.MapFrom(src => src.Product.Price));
+    o.CreateMap<OrderDetailsDto, CartDetailsDto>();
 });
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IMessageBus, MessageBus>();

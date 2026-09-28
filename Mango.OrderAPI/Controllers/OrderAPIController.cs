@@ -8,6 +8,7 @@ using Mango.Serives.Shared.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.PortableExecutable;
 
 namespace Mango.OrderAPI.Controllers
 {
@@ -77,6 +78,70 @@ namespace Mango.OrderAPI.Controllers
             return Ok(_response);
         }
 
+        [HttpPost("CreateOrder", Name = "CreateOrder")]
+        public async Task<ActionResult<ResponseDto>> CreateOrder([FromBody] CartDto cartDto)
+        {
+            try
+            {
+                if (cartDto != null && cartDto.CartHeader != null && cartDto.CartHeader.UserId != null && cartDto.CartDetails != null && cartDto.CartDetails.Count() > 0)
+                {
+                    var cartHeaderFromdb = await _db.CartHeaders.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == cartDto.CartHeader.UserId);
+                    var cartDetailsDto = cartDto.CartDetails.First();
+                    if (cartHeaderFromdb == null)
+                    {
+                        CartHeader cartHeader = _mapper.Map<CartHeader>(cartDto.CartHeader);
+                        CartDetails cartDetails = _mapper.Map<CartDetails>(cartDetailsDto);
+                        cartDetails.CartHeader = cartHeader;
+                        _db.CartDetails.Add(cartDetails);
+                        await _db.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        var cartDetailsFromDb = await _db.CartDetails.AsNoTracking()
+                            .FirstOrDefaultAsync(u => u.ProductId == cartDetailsDto.ProductId && u.CartHeaderId == cartHeaderFromdb.CartHeaderId);
+
+                        if (cartDetailsFromDb == null)
+                        {
+                            cartDetailsDto.CartHeaderId = cartHeaderFromdb.CartHeaderId;
+                            _db.CartDetails.Add(_mapper.Map<CartDetails>(cartDetailsDto));
+                            await _db.SaveChangesAsync();
+                        }
+                        else
+                        {
+
+                            cartDetailsDto.Count += cartDetailsFromDb.Count;
+
+                            cartDetailsDto.CartHeaderId = cartHeaderFromdb.CartHeaderId;
+                            cartDetailsDto.CartDetailsId = cartDetailsFromDb.CartDetailsId;
+                            if (cartDetailsDto.Count <= 0)
+                            {
+                                _db.CartDetails.Remove(_mapper.Map<CartDetails>(cartDetailsDto));
+                            }
+                            else
+                            {
+                                _db.CartDetails.Update(_mapper.Map<CartDetails>(cartDetailsDto));
+                            }
+                            await _db.SaveChangesAsync();
+                        }
+                    }
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessage = "Invalid cart data.";
+                    return BadRequest(_response);
+                }
+
+                _response.Result = cartDto;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessage = ex.Message;
+            }
+            if (!_response.IsSuccess) return BadRequest(_response);
+            return Ok(_response);
+        }
 
 
     }

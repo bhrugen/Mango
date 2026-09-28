@@ -22,7 +22,7 @@ namespace Mango.OrderAPI.Models.Dto
 
         public double Discount { get; set; }
         [Range(1, 100, ErrorMessage = "Count must be between 1 and 10000.")]
-        public double CartTotal { get; set; }
+        public double OrderTotal { get; set; }
 
         public IEnumerable<OrderDetailsDto>? OrderDetails { get; set; }
 
