@@ -3,6 +3,7 @@ using Mango.AuthAPI.Models;
 using Mango.AuthAPI.Service.IService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Mango.MessageBus;
 
 namespace Mango.AuthAPI.Controllers
 {
@@ -14,18 +15,24 @@ namespace Mango.AuthAPI.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private const string CustomerRole = "CUSTOMER";
+
+        private readonly IConfiguration _configuration;
         private const string AdminRole = "ADMIN";
         private readonly ResponseDto _responseDto;
-
+        private readonly IMessageBus _messageBus;
 
         public AuthAPIController(UserManager<ApplicationUser> userManager,
             IJwtTokenGenerator jwtTokenGenerator,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IMessageBus messageBus,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _responseDto = new ResponseDto();
             _roleManager = roleManager;
             _jwtTokenGenerator = jwtTokenGenerator;
+            _messageBus = messageBus;
+            _configuration = configuration;
         }
 
         [HttpPost("register")]
@@ -76,6 +83,10 @@ namespace Mango.AuthAPI.Controllers
             }
 
             await _userManager.AddToRoleAsync(user, roleToAssign);
+
+            var queueName = _configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue")
+                 ?? throw new InvalidOperationException("TopicAndQueueNames:RegisterUserQueue is not configured"); ;
+            await _messageBus.PublishMessage(queueName,user.Email);
 
             return Ok(_responseDto);
         }

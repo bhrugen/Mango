@@ -2,6 +2,7 @@ using Mango.AuthAPI.Data;
 using Mango.AuthAPI.Models;
 using Mango.AuthAPI.Service;
 using Mango.AuthAPI.Service.IService;
+using Mango.MessageBus;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -17,7 +18,7 @@ builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSett
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-
+builder.Services.AddScoped<IMessageBus,MessageBus>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

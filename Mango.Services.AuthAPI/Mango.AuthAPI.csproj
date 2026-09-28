@@ -8,6 +8,7 @@
 
   <ItemGroup>
 	  <PackageReference Include="AutoMapper" Version="16.2.0" />
+	  <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.21.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="11.0.0-rc.1.26425.128" />
 	  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="11.0.0-rc.1.26425.128" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="11.0.0-rc.1.26425.128">
@@ -23,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mango.MessageBus\Mango.MessageBus.csproj" />
     <ProjectReference Include="..\Mango.Serives.Shared\Mango.Serives.Shared.csproj" />
   </ItemGroup>
 
