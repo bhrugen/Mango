@@ -12,11 +12,13 @@ namespace Mango.EmailAPI.Messaging
         private readonly string serviceBusConnectionString;
         private readonly string emailCartQueue;
 
-       
+        private readonly ILogger<AzureServiceBusConsumer> _logger;
 
-        public AzureServiceBusConsumer(IConfiguration configuration)
+
+        public AzureServiceBusConsumer(IConfiguration configuration, ILogger<AzureServiceBusConsumer> logger)
         {
             _configuration = configuration;
+            _logger = logger;
             serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString")
                 ?? throw new InvalidOperationException("Missing configuration value: ServiceBusConnectionString");
             emailCartQueue = _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue")
@@ -38,7 +40,7 @@ namespace Mango.EmailAPI.Messaging
 
         private  Task ErrorHandler(ProcessErrorEventArgs args)
         {
-            //TO DO: Log the error
+            _logger.LogError(args.Exception, "Error occurred while processing message from Service Bus.");
             return Task.CompletedTask;
         }
 
@@ -55,12 +57,13 @@ namespace Mango.EmailAPI.Messaging
                     // Handle null case
                     return;
                 }
-                
+                throw new NotImplementedException("Email sending logic is not implemented yet.");
                 //Send Email 
             }
             catch(Exception ex)
             {
-                // Handle exception
+                _logger.LogError(ex, "Error occurred while processing message from Service Bus.");
+                await args.DeadLetterMessageAsync(message, "DeserializationError", ex.Message);
             }
         }
 
