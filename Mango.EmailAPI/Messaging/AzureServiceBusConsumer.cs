@@ -1,4 +1,7 @@
 ﻿using Azure.Messaging.ServiceBus;
+using Mango.EmailAPI.Models.Dto;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace Mango.EmailAPI.Messaging
 {
@@ -8,6 +11,8 @@ namespace Mango.EmailAPI.Messaging
         private ServiceBusProcessor _emailCartProcessor;
         private readonly string serviceBusConnectionString;
         private readonly string emailCartQueue;
+
+       
 
         public AzureServiceBusConsumer(IConfiguration configuration)
         {
@@ -21,14 +26,45 @@ namespace Mango.EmailAPI.Messaging
             _emailCartProcessor = client.CreateProcessor(emailCartQueue);
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            _emailCartProcessor.ProcessMessageAsync += OnEmailCartRequestReceived;
+            _emailCartProcessor.ProcessErrorAsync += ErrorHandler;
+            await _emailCartProcessor.StartProcessingAsync(cancellationToken);
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        private  Task ErrorHandler(ProcessErrorEventArgs args)
         {
-            throw new NotImplementedException();
+            //TO DO: Log the error
+            return Task.CompletedTask;
+        }
+
+        private async Task OnEmailCartRequestReceived(ProcessMessageEventArgs args)
+        {
+            var message = args.Message;
+            var body =Encoding.UTF8.GetString(message.Body);
+
+            try
+            {
+                CartDto? objMessage = JsonConvert.DeserializeObject<CartDto>(body);
+                if (objMessage == null)
+                {
+                    // Handle null case
+                    return;
+                }
+                
+                //Send Email 
+            }
+            catch(Exception ex)
+            {
+                // Handle exception
+            }
+        }
+
+        public async Task StopAsync(CancellationToken cancellationToken)
+        {
+            await _emailCartProcessor.StopProcessingAsync(cancellationToken);
+            await _emailCartProcessor.DisposeAsync();
         }
     }
 }
