@@ -1,5 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Mango.EmailAPI.Models.Dto;
+using Mango.EmailAPI.Services.IServices;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -9,16 +10,18 @@ namespace Mango.EmailAPI.Messaging
     {
         private readonly IConfiguration _configuration;
         private ServiceBusProcessor _emailCartProcessor;
+        private readonly IEmailService _emailService;   
         private readonly string serviceBusConnectionString;
         private readonly string emailCartQueue;
 
         private readonly ILogger<AzureServiceBusConsumer> _logger;
 
 
-        public AzureServiceBusConsumer(IConfiguration configuration, ILogger<AzureServiceBusConsumer> logger)
+        public AzureServiceBusConsumer(IConfiguration configuration, ILogger<AzureServiceBusConsumer> logger, IEmailService emailService)
         {
             _configuration = configuration;
             _logger = logger;
+            _emailService = emailService;
             serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString")
                 ?? throw new InvalidOperationException("Missing configuration value: ServiceBusConnectionString");
             emailCartQueue = _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue")
@@ -54,11 +57,12 @@ namespace Mango.EmailAPI.Messaging
                 CartDto? objMessage = JsonConvert.DeserializeObject<CartDto>(body);
                 if (objMessage == null)
                 {
-                    // Handle null case
+                    _logger.LogError("Failed to deserialize message body to CartDto. Message body: {MessageBody}", body);
                     return;
                 }
-                throw new NotImplementedException("Email sending logic is not implemented yet.");
+                
                 //Send Email 
+                _emailService.EmailCartAndLog(objMessage).GetAwaiter().GetResult();
             }
             catch(Exception ex)
             {
