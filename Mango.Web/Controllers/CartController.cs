@@ -4,6 +4,7 @@ using Mango.Web.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Mango.Web.Controllers
 {
@@ -54,7 +55,7 @@ namespace Mango.Web.Controllers
             return RedirectToAction(nameof(CartIndex));
         }
 
-
+        [HttpPost]
         public async Task<IActionResult> ApplyCoupon(CartDto cartDto)
         {
             cartDto.CartHeader.UserId = User.Claims.Where(u => u.Type == "sub").FirstOrDefault()?.Value;
@@ -62,6 +63,20 @@ namespace Mango.Web.Controllers
             if (responseDto != null && responseDto.IsSuccess)
             {
                 TempData["success"] = "Cart updated successfully";
+            }
+            return RedirectToAction(nameof(CartIndex));
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EmailCart()
+        {
+            CartDto cart = await LoadCartByLoggedInUser();
+            cart.Email = User.Claims.Where(u => u.Type == "name").FirstOrDefault()?.Value;
+            ResponseDto? responseDto = await _cartService.EmailCartRequestAsync(cart);
+            if (responseDto != null && responseDto.IsSuccess)
+            {
+                TempData["success"] = "Email will be processed and sent shortly.";
             }
             return RedirectToAction(nameof(CartIndex));
         }

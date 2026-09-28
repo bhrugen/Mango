@@ -184,7 +184,7 @@
                         <button type="submit" form="checkoutForm" class="btn btn-gold btn-lg">
                             <i class="bi bi-check-circle me-2"></i>Confirm Order &mdash; @Model.CartHeader.CartTotal.ToString("c")
                         </button>
-                        <form action="/Cart/EmailCart" method="post">
+                        <form asp-action="EmailCart" method="post">
                             <input type="hidden" name="CartHeader.UserId" value="" />
                             <input type="hidden" name="CartHeader.CartHeaderId" value="1" />
                             <button type="submit" class="btn btn-outline-secondary w-100">
