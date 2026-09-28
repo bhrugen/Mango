@@ -1,0 +1,53 @@
+using Mango.MessageBus;
+using Mango.OrderAPI.Data;
+using Mango.OrderAPI.Models;
+using Mango.OrderAPI.Models.Dto;
+using Mango.OrderAPI.Service;
+using Mango.OrderAPI.Service.IService;
+using Mango.Serives.Shared.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
+using System.Reflection.PortableExecutable;
+using System.Text;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddDbContext<ApplicationDbContext>(option =>
+{
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddControllers();
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();
+builder.Services.AddAutoMapper(o =>
+{
+    o.CreateMap<OrderHeaderDto, OrderHeader>().ReverseMap();
+    o.CreateMap<OrderDetailsDto, OrderDetails>().ReverseMap();
+});
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IMessageBus, MessageBus>();
+
+
+builder.Services.AddHttpClient("Product",
+    u => u.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
+
+
+builder.AddJwtAuthentication();
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
