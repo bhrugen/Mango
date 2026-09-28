@@ -105,5 +105,63 @@ namespace Mango.OrderAPI.Controllers
         }
 
 
+        [HttpPost("ConfirmOrder/{orderId:int}", Name = "ConfirmOrder")]
+        public async Task<ActionResult<ResponseDto>> ConfirmOrder(int orderId)
+        {
+            try
+            {
+                OrderHeader orderHeader = await _db.OrderHeader.FirstOrDefaultAsync(u => u.OrderHeaderId == orderId);
+                if (orderHeader != null)
+                {
+                    orderHeader.Status = SD.Status_Approved;
+                    await _db.SaveChangesAsync();
+                    _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessage = $"Order with ID {orderId} not found.";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessage = ex.Message;
+            }
+            if (!_response.IsSuccess) return BadRequest(_response);
+            return Ok(_response);
+        }
+
+
+        [HttpPost("UpdateOrderStatus/{orderId:int}")]
+        public async Task<ActionResult<ResponseDto>> UpdateOrderStatus(int orderId, [FromBody] string status)
+        {
+            try
+            {
+                OrderHeader orderHeader = await _db.OrderHeader.FirstOrDefaultAsync(u => u.OrderHeaderId == orderId);
+                if (orderHeader != null)
+                {
+                    orderHeader.Status = status;
+                    await _db.SaveChangesAsync();
+                    _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessage = $"Order with ID {orderId} not found.";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessage = ex.Message;
+            }
+            if (!_response.IsSuccess) return BadRequest(_response);
+            return Ok(_response);
+        }
+
+
     }
 }
