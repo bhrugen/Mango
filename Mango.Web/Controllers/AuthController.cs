@@ -20,15 +20,17 @@ namespace Mango.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string? returnUrl=null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             LoginRequestDto loginRequestDto = new();
             return View(loginRequestDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginRequestDto obj)
+        public async Task<IActionResult> Login(LoginRequestDto obj, string? returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             ResponseDto? responseDto = await _authSerivce.LoginAsync(obj);
             if (responseDto != null && responseDto.IsSuccess)
             {
@@ -36,6 +38,11 @@ namespace Mango.Web.Controllers
                 LoginResponseDto loginResponseDto = responseDto.GetResult<LoginResponseDto>();
                 await SignInUser(loginResponseDto);
                 _tokenService.SetToken(loginResponseDto.Token);
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return LocalRedirect(returnUrl);
+                }
+
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -46,22 +53,24 @@ namespace Mango.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public IActionResult Register(string? returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             RegisterationRequestDto registerationRequestDto = new();
             return View(registerationRequestDto);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterationRequestDto obj)
+        public async Task<IActionResult> Register(RegisterationRequestDto obj, string? returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             ResponseDto? responseDto = await _authSerivce.RegisterAsync(obj);
             if (responseDto != null && responseDto.IsSuccess)
             {
                 // Handle the successful response
                 TempData["success"] = "Registration Successful";
-                return RedirectToAction(nameof(Login));
+                return RedirectToAction(nameof(Login), new { returnUrl });
             }
             else
             {
