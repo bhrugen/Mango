@@ -55,7 +55,7 @@ namespace Mango.Web.Controllers
                 return RedirectToAction(nameof(Confirmation), new { orderId = orderHeaderDto.OrderHeaderId });
             }
 
-            return View();
+            return RedirectToAction("Error", "Home");
         }
 
 

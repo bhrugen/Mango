@@ -1,5 +1,4 @@
-﻿using Mango.OrderAPI.Models.Dto;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mango.Web.Models

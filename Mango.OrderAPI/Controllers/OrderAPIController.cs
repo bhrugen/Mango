@@ -85,6 +85,9 @@ namespace Mango.OrderAPI.Controllers
             try
             {
                 OrderHeaderDto orderHeaderDto=  _mapper.Map<OrderHeaderDto>(cartDto.CartHeader);
+                orderHeaderDto.Email = cartDto.Email;
+                orderHeaderDto.Name = cartDto.Name;
+                orderHeaderDto.Phone = cartDto.Phone;
                 orderHeaderDto.OrderTime = DateTime.Now;
                 orderHeaderDto.Status = SD.Status_Pending;
                 orderHeaderDto.OrderDetails = _mapper.Map<IEnumerable<OrderDetailsDto>>(cartDto.CartDetails);
