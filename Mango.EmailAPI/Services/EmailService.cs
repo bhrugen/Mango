@@ -30,6 +30,11 @@ namespace Mango.EmailAPI.Services
             await LogAndEmail(message.ToString(), cartDto.Email);
         }
 
+        public Task RegisterUserEmailAndLog(string email)
+        {
+            string message = "User Registeration Successful. <br/> Email : " + email;
+            return LogAndEmail(message, email);
+        }
 
         private async Task<bool> LogAndEmail(string message,string email)
         {
