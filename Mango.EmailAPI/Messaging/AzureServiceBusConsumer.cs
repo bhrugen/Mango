@@ -63,6 +63,7 @@ namespace Mango.EmailAPI.Messaging
                 
                 //Send Email 
                 _emailService.EmailCartAndLog(objMessage).GetAwaiter().GetResult();
+                await args.CompleteMessageAsync(message);
             }
             catch(Exception ex)
             {
