@@ -1,3 +1,4 @@
+using Mango.MessageBus;
 using Mango.Serives.Shared.Extensions;
 using Mango.ShoppingCartAPI.Data;
 using Mango.ShoppingCartAPI.Models;
@@ -25,6 +26,7 @@ builder.Services.AddAutoMapper(o =>
     o.CreateMap<CartDetails, CartDetailsDto>().ReverseMap();
 });
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IMessageBus,MessageBus>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 
 builder.Services.AddHttpClient("Product", 

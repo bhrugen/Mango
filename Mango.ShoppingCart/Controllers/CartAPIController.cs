@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Mango.MessageBus;
 using Mango.Serives.Shared.Models;
 using Mango.ShoppingCartAPI.Data;
 using Mango.ShoppingCartAPI.Migrations;
@@ -21,14 +22,18 @@ namespace Mango.ShoppingCartAPI.Controllers
         private IMapper _mapper;
         private IProductService _productService;
         private ICouponService _couponService;
-
-        public CartAPIController(ApplicationDbContext db, IMapper mapper, IProductService productService, ICouponService couponService)
+        private readonly IMessageBus _messageBus;
+        private readonly IConfiguration _configuration;
+        public CartAPIController(ApplicationDbContext db, IMapper mapper, IProductService productService, 
+            ICouponService couponService, IMessageBus messageBus, IConfiguration configuration)
         {
             _db = db;
             _mapper = mapper;
             _response = new ResponseDto();
             _productService = productService;
             _couponService = couponService;
+            _messageBus = messageBus;
+            _configuration = configuration;
         }
         [HttpGet("GetCart/{userId}", Name = "GetCart")]
         public async Task<ActionResult<ResponseDto>> GetCart(string userId)
@@ -202,6 +207,24 @@ namespace Mango.ShoppingCartAPI.Controllers
                 }
 
                 _response.Result = cartDto;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessage = ex.Message;
+            }
+            if (!_response.IsSuccess) return BadRequest(_response);
+            return Ok(_response);
+        }
+
+
+        [HttpPost("EmailCartRequest", Name = "EmailCartRequest")]
+        public async Task<ActionResult<ResponseDto>> EmailCartRequest([FromBody] CartDto cartDto)
+        {
+            try
+            {
+                await _messageBus.PublishMessage(_configuration.GetValue<string>("TopicAndQueueNames:TopicName"), cartDto);
+                _response.Result = true;
             }
             catch (Exception ex)
             {
