@@ -1,0 +1,11 @@
+@Mango.RewardsAPI_HostAddress = http://localhost:5191
+
+GET {{Mango.RewardsAPI_HostAddress}}/openapi/v1.json
+Accept: application/json
+
+###
+
+GET {{Mango.RewardsAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
