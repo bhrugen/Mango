@@ -42,11 +42,11 @@ namespace Mango.OrderAPI.Controllers
 
                 if(string.IsNullOrEmpty(userId))
                 {
-                    objList = await _db.OrderHeader.AsNoTracking().ToListAsync();
+                    objList = await _db.OrderHeader.Include(u => u.OrderDetails).AsNoTracking().ToListAsync();
                 }
                 else
                 {
-                    objList = await _db.OrderHeader.AsNoTracking().Where(u => u.UserId == userId).ToListAsync();
+                    objList = await _db.OrderHeader.Include(u=>u.OrderDetails).AsNoTracking().Where(u => u.UserId == userId).ToListAsync();
                 }
                     _response.Result = _mapper.Map<List<OrderHeaderDto>>(objList);
             }
@@ -66,7 +66,7 @@ namespace Mango.OrderAPI.Controllers
             try
             {
                 OrderHeader? orderHeader = 
-                    await _db.OrderHeader.AsNoTracking().Where(u => u.OrderHeaderId == id).FirstOrDefaultAsync();
+                    await _db.OrderHeader.Include(u => u.OrderDetails).AsNoTracking().Where(u => u.OrderHeaderId == id).FirstOrDefaultAsync();
 
                 _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
             }
