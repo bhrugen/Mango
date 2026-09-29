@@ -74,13 +74,13 @@ namespace Mango.Web.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAllOrders(string? status)
+        public async Task<IActionResult> GetAllOrders(string? status, bool myOrder=false)
         {
-            string? userId = User.IsInRole(SD.RoleAdmin)
+            string? userId = User.IsInRole(SD.RoleAdmin) && !myOrder
                ? null
                : User.Claims.FirstOrDefault(u => u.Type == "sub")?.Value;
 
-            IEnumerable<OrderHeaderDto> orderList = new List<OrderHeaderDto>();
+            IEnumerable<OrderHeaderDto>? orderList = new List<OrderHeaderDto>();
             var response = await _orderService.GetAllOrder(userId);
             if (response != null && response.IsSuccess)
             {

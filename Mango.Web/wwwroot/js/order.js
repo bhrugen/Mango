@@ -1,6 +1,8 @@
 ﻿$(document).ready(function () {
-    var status = new URLSearchParams(window.location.search).get("status") || "all";
-    loadDataTable(status);
+    var prarms = new URLSearchParams(window.location.search);
+    var status = prarms.get("status") || "all";
+    var myOrder = prarms.get("myorder");
+    loadDataTable(status, myOrder);
 });
 
 var statusBadges = {
@@ -11,10 +13,10 @@ var statusBadges = {
     Refunded: "bg-danger"
 };
 
-function loadDataTable(status) {
+function loadDataTable(status, myOrder) {
     $("#tblData").DataTable({
         ajax: {
-            url: "/Order/GetAllOrders?status="+status,
+            url: "/Order/GetAllOrders?status="+status+"&myOrder="+myOrder,
             type: "GET",
             datatype: "json"
         },
