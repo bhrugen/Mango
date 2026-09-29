@@ -3,6 +3,13 @@
     loadDataTable(status);
 });
 
+var statusBadges = {
+    Approved: "bg-success",
+    ReadyForPickup: "bg-warning text-dark",
+    Completed: "bg-primary",
+    Cancelled: "bg-danger",
+    Refunded: "bg-danger"
+};
 
 function loadDataTable(status) {
     $("#tblData").DataTable({
@@ -16,7 +23,15 @@ function loadDataTable(status) {
             { data: "email", width: "22%" },
             { data: "name", width: "18%" },
             { data: "phone", width: "14%" },
-            { data: "status", width: "14%" },
+            {
+                data: "status",
+                width: "10%",
+                render: function (data, type) {
+                    var css = statusBadges[data] || "bg-secondary";
+                    return '<span class="badge '+css+'">'+data+"</span>";
+                }
+            },
+            
             {
                 data: "orderTotal",
                 width: "10%",

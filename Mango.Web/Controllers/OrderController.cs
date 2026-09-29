@@ -92,7 +92,7 @@ namespace Mango.Web.Controllers
                     "approved" => orderList.Where(u => u.Status == SD.Status_Approved),
                     "readyforpickup" => orderList.Where(u => u.Status == SD.Status_ReadyForPickup),
                     "cancelled" => orderList.Where(u => u.Status == SD.Status_Cancelled || u.Status == SD.Status_Refunded),
-                    _ => orderList.Where(u => u.Status == SD.Status_Approved),
+                    _ => orderList
                 };
                 
                 return Json(new { data = orderList });
