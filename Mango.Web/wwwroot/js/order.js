@@ -1,12 +1,13 @@
 ﻿$(document).ready(function () {
-    loadDataTable();
+    var status = new URLSearchParams(window.location.search).get("status") || "all";
+    loadDataTable(status);
 });
 
 
-function loadDataTable() {
+function loadDataTable(status) {
     $("#tblData").DataTable({
         ajax: {
-            url: "/Order/GetAllOrders",
+            url: "/Order/GetAllOrders?status="+status,
             type: "GET",
             datatype: "json"
         },

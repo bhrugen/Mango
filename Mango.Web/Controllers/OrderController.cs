@@ -74,18 +74,28 @@ namespace Mango.Web.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAllOrders()
+        public async Task<IActionResult> GetAllOrders(string? status)
         {
             string? userId = User.IsInRole(SD.RoleAdmin)
                ? null
                : User.Claims.FirstOrDefault(u => u.Type == "sub")?.Value;
 
+            IEnumerable<OrderHeaderDto> orderList = new List<OrderHeaderDto>();
             var response = await _orderService.GetAllOrder(userId);
             if (response != null && response.IsSuccess)
             {
                 var result = Convert.ToString(response.Result);
-                var orders = JsonConvert.DeserializeObject<List<OrderHeaderDto>>(result);
-                return Json(new { data = orders });
+                orderList = JsonConvert.DeserializeObject<List<OrderHeaderDto>>(result);
+
+                orderList = status?.ToLower() switch
+                {
+                    "approved" => orderList.Where(u => u.Status == SD.Status_Approved),
+                    "readyforpickup" => orderList.Where(u => u.Status == SD.Status_ReadyForPickup),
+                    "cancelled" => orderList.Where(u => u.Status == SD.Status_Cancelled || u.Status == SD.Status_Refunded),
+                    _ => orderList.Where(u => u.Status == SD.Status_Approved),
+                };
+                
+                return Json(new { data = orderList });
             }
             return Json(new { data = new List<OrderHeaderDto>() });
         }
