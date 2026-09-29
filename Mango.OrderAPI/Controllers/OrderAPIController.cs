@@ -60,7 +60,7 @@ namespace Mango.OrderAPI.Controllers
         }
 
 
-        [HttpGet("GetOrder/{id:int}", Name = "GetOrderById")]
+        [HttpGet("GetOrderById/{id:int}", Name = "GetOrderById")]
         public async Task<ActionResult<ResponseDto>> GetOrderById(int id)
         {
             try
