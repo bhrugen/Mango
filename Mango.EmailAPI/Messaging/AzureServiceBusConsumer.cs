@@ -11,10 +11,14 @@ namespace Mango.EmailAPI.Messaging
         private readonly IConfiguration _configuration;
         private ServiceBusProcessor _emailCartProcessor;
         private ServiceBusProcessor _registerUserProcessor;
+        private ServiceBusProcessor _orderCreatedProcessor;
         private readonly IEmailService _emailService;   
         private readonly string serviceBusConnectionString;
         private readonly string registerUserQueue;
         private readonly string emailCartQueue;
+
+        private readonly string orderCreatedTopic;
+        private readonly string orderCreatedEmailSubscription;
 
         private readonly ILogger<AzureServiceBusConsumer> _logger;
 
@@ -30,8 +34,18 @@ namespace Mango.EmailAPI.Messaging
                ?? throw new InvalidOperationException("Missing configuration value: RegisterUserQueue");
             emailCartQueue = _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue")
                 ?? throw new InvalidOperationException("Missing configuration value: EmailShoppingCartQueue");
+            orderCreatedTopic = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic")
+            ?? throw new InvalidOperationException("Missing configuration value: OrderCreatedTopic");
+            orderCreatedEmailSubscription = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedEmailSubscription")
+                ?? throw new InvalidOperationException("Missing configuration value: OrderCreatedEmailSubscription");
 
             var client = new ServiceBusClient(serviceBusConnectionString);
+            _orderCreatedProcessor = client.CreateProcessor(orderCreatedTopic, orderCreatedEmailSubscription, new ServiceBusProcessorOptions
+            {
+                AutoCompleteMessages = false
+            });
+
+
             _emailCartProcessor = client.CreateProcessor(emailCartQueue, new ServiceBusProcessorOptions
             {
                 AutoCompleteMessages = false
@@ -53,7 +67,38 @@ namespace Mango.EmailAPI.Messaging
             _registerUserProcessor.ProcessMessageAsync += OnRegisterUserRequestReceived;
             _registerUserProcessor.ProcessErrorAsync += ErrorHandler;
             await _registerUserProcessor.StartProcessingAsync(cancellationToken);
+
+
+            _orderCreatedProcessor.ProcessMessageAsync += OnOrderCreatedRequestReceived;
+            _orderCreatedProcessor.ProcessErrorAsync += ErrorHandler;
+            await _orderCreatedProcessor.StartProcessingAsync(cancellationToken);
         }
+
+        private async Task OnOrderCreatedRequestReceived(ProcessMessageEventArgs args)
+        {
+            var message = args.Message;
+            var body = Encoding.UTF8.GetString(message.Body);
+
+            try
+            {
+                OrderHeaderDto? orderHeaderDto= JsonConvert.DeserializeObject<OrderHeaderDto>(body);
+                if (orderHeaderDto == null)
+                {
+                    _logger.LogError("Failed to deserialize message body to OrderHeaderDto. Message body: {MessageBody}", body);
+                    return;
+                }
+
+                //Send Email 
+                //await _emailService.RegisterUserEmailAndLog(email);
+                await args.CompleteMessageAsync(message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while processing message from Service Bus.");
+                await args.DeadLetterMessageAsync(message, "DeserializationError", ex.Message);
+            }
+        }
+
 
         private async Task OnRegisterUserRequestReceived(ProcessMessageEventArgs args)
         {

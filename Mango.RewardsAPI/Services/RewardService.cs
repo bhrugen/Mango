@@ -2,7 +2,6 @@
 using Mango.RewardsAPI.Models;
 using Mango.RewardsAPI.Models.Dto;
 using Mango.RewardsAPI.Services.IServices;
-using Mango.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 

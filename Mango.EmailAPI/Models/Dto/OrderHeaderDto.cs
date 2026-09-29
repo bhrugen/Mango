@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Mango.RewardsAPI.Models.Dto
+namespace Mango.EmailAPI.Models.Dto
 {
     public class OrderHeaderDto
     {
@@ -17,7 +17,6 @@ namespace Mango.RewardsAPI.Models.Dto
 
         public double Discount { get; set; }
         public double OrderTotal { get; set; }
-
 
     }
 }

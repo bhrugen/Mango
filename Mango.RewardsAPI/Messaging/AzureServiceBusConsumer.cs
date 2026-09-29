@@ -1,6 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
+using Mango.RewardsAPI.Models.Dto;
 using Mango.RewardsAPI.Services.IServices;
-using Mango.Web.Models;
 using Newtonsoft.Json;
 using System.Text;
 

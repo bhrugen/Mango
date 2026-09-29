@@ -1,5 +1,5 @@
 ﻿
-using Mango.Web.Models;
+using Mango.RewardsAPI.Models.Dto;
 
 namespace Mango.RewardsAPI.Services.IServices
 {
