@@ -2,6 +2,9 @@
   <Folder Name="/FrontEnd/">
     <Project Path="Mango.Web/Mango.Web.csproj" Id="d9cf07e0-12bb-4d6b-a1da-bf495f045e4c" />
   </Folder>
+  <Folder Name="/Gateway/">
+    <Project Path="Mango.GatewaySolution/Mango.GatewaySolution.csproj" Id="65d88c24-e053-4881-a18c-3d24cab5c5c3" />
+  </Folder>
   <Folder Name="/Integration/">
     <Project Path="Mango.MessageBus/Mango.MessageBus.csproj" Id="71a63ee0-6949-4c6e-96f4-65a83f193d40" />
   </Folder>
