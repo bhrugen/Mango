@@ -34,6 +34,44 @@ namespace Mango.Web.Controllers
             return View(nameof(OrderIndex));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> OrderReadyForPickup(int orderId)
+        {
+            ResponseDto? responseDto = await _orderService.UpdateOrderStatus(orderId,SD.Status_ReadyForPickup);
+            if (responseDto != null && responseDto.IsSuccess)
+            {
+                TempData["success"] = "Status updated successfully";
+                return RedirectToAction(nameof(OrderDetail), new { orderId });
+            }
+            TempData["error"] = "Error encountered!";
+            return RedirectToAction(nameof(OrderDetail), new { orderId });
+        }
+        [HttpPost]
+        public async Task<IActionResult> CompleteOrder(int orderId)
+        {
+            ResponseDto? responseDto = await _orderService.UpdateOrderStatus(orderId, SD.Status_Completed);
+            if (responseDto != null && responseDto.IsSuccess)
+            {
+                TempData["success"] = "Status updated successfully";
+                return RedirectToAction(nameof(OrderDetail), new {  orderId });
+            }
+            TempData["error"] = "Error encountered!";
+            return RedirectToAction(nameof(OrderDetail), new {  orderId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelOrder(int orderId)
+        {
+            ResponseDto? responseDto = await _orderService.UpdateOrderStatus(orderId, SD.Status_Cancelled);
+            if (responseDto != null && responseDto.IsSuccess)
+            {
+                TempData["success"] = "Status updated successfully";
+                return RedirectToAction(nameof(OrderDetail), new {  orderId });
+            }
+            TempData["error"] = "Error encountered!";
+            return RedirectToAction(nameof(OrderDetail), new {  orderId });
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAllOrders()

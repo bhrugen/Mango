@@ -1,3 +1,4 @@
+@using Mango.Web.Utility
 @model OrderHeaderDto
 
 <form method="post">
@@ -89,19 +90,32 @@
                         <span class="price-tag">@Model.OrderTotal.ToString("c")</span>
                     </div>
 
-                    <!-- Admin-only actions (each button is shown only for certain statuses) -->
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success">
-                            <i class="bi bi-bag-check me-2"></i>Ready for Pickup
-                        </button>
-                        <button type="submit" class="btn btn-gold">
-                            <i class="bi bi-check-circle me-2"></i>Complete Order
-                        </button>
-                        <button type="submit" class="btn btn-outline-danger">
-                            <i class="bi bi-x-circle me-2"></i>Cancel Order
-                        </button>
-                    </div>
-
+                        @if (User.IsInRole(SD.RoleAdmin))
+                        {
+                            <div class="d-grid gap-2">
+                                @if (Model.Status == SD.Status_Approved)
+                                {
+                                    <button asp-action="OrderReadyForPickup" asp-route-orderId="@Model.OrderHeaderId"
+                                    type="submit" class="btn btn-success">
+                                        <i class="bi bi-bag-check me-2"></i>Ready for Pickup
+                                    </button>
+                                }
+                            @if (Model.Status == SD.Status_ReadyForPickup)
+                            {
+                                <button asp-action="CompleteOrder" asp-route-orderId="@Model.OrderHeaderId"
+                                type="submit" class="btn btn-gold">
+                                    <i class="bi bi-check-circle me-2"></i>Complete Order
+                                </button>
+                            }
+                            @if (Model.Status == SD.Status_Approved || Model.Status == SD.Status_ReadyForPickup)
+                            {
+                                <button asp-action="CancelOrder" asp-route-orderId="@Model.OrderHeaderId"
+                                type="submit" class="btn btn-outline-danger">
+                                    <i class="bi bi-x-circle me-2"></i>Cancel Order
+                                </button>
+                            }
+                            </div>
+                        }
                 </div>
             </div>
         </div>
