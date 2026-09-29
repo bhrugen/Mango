@@ -1,0 +1,107 @@
+<form method="post">
+    <input type="hidden" name="OrderHeaderId" value="1" />
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 fade-in-up">
+        <div>
+            <div class="section-label"><span>Order #1</span></div>
+            <h2 class="section-title mb-0">Order Details</h2>
+        </div>
+        <a href="#" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>All Orders
+        </a>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- LEFT: Contact info -->
+        <div class="col-lg-7">
+            <div class="card fade-in-up h-100">
+                <div class="card-header">
+                    <span style="font-family:Georgia,serif;font-weight:700;font-size:1rem;color:var(--charcoal);">
+                        <i class="bi bi-person-lines-fill me-2" style="color:var(--brand-primary);"></i>Contact Information
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label text-muted small">Full Name</label>
+                            <input value="John Smith" readonly class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">Phone</label>
+                            <input value="555-123-4567" readonly class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">Email</label>
+                            <input value="john@example.com" readonly class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">Order Date</label>
+                            <input value="28 Sep 2026, 6:30 PM" readonly class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">Status</label>
+                            <div class="mt-1">
+                                <!-- Badge colour by status:
+                                     Approved = bg-success | ReadyForPickup = bg-warning text-dark
+                                     Completed = bg-primary | Cancelled = bg-danger | other = bg-secondary -->
+                                <span class="badge bg-success px-3 py-2" style="font-size:.85rem;">Approved</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Items + Total + Actions -->
+        <div class="col-lg-5">
+            <div class="card fade-in-up">
+                <div class="card-header bg-dark-restaurant">
+                    <span style="font-family:Georgia,serif;font-weight:700;color:var(--brand-light);font-size:1rem;">
+                        <i class="bi bi-receipt me-2"></i>Order Summary
+                    </span>
+                </div>
+                <div class="card-body">
+
+                    <!-- One block per order item -->
+                    <div class="d-flex align-items-center justify-content-between gap-3 mb-3 p-3 rounded border">
+                        <div>
+                            <div style="font-family:Georgia,serif;font-weight:700;font-size:.9rem;">Margherita Pizza</div>
+                            <div class="text-muted" style="font-size:.8rem;">x 2 &middot; $12.50 each</div>
+                        </div>
+                        <div class="price-tag-sm fw-semibold">$25.00</div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between gap-3 mb-3 p-3 rounded border">
+                        <div>
+                            <div style="font-family:Georgia,serif;font-weight:700;font-size:.9rem;">Caesar Salad</div>
+                            <div class="text-muted" style="font-size:.8rem;">x 1 &middot; $8.00 each</div>
+                        </div>
+                        <div class="price-tag-sm fw-semibold">$8.00</div>
+                    </div>
+
+                    <div class="divider-ornament my-3"><span>+</span></div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span style="font-family:Georgia,serif;font-weight:700;font-size:1.1rem;">Total</span>
+                        <span class="price-tag">$33.00</span>
+                    </div>
+
+                    <!-- Admin-only actions (each button is shown only for certain statuses) -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-bag-check me-2"></i>Ready for Pickup
+                        </button>
+                        <button type="submit" class="btn btn-gold">
+                            <i class="bi bi-check-circle me-2"></i>Complete Order
+                        </button>
+                        <button type="submit" class="btn btn-outline-danger">
+                            <i class="bi bi-x-circle me-2"></i>Cancel Order
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
