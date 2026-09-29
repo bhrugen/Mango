@@ -1,5 +1,6 @@
 @{
 	var status = Context.Request.Query["status"];
+	var myOrder= Context.Request.Query["myorder"]=="true";
 	var approved = "";
 	var readyforpickup = "";
 	var cancelled = "";
@@ -19,21 +20,21 @@
 <!-- Header -->
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 fade-in-up">
 	<div>
-		<div class="section-label"><span>Dashboard</span></div>
-		<h2 class="section-title mb-0">Order List</h2>
+		<div class="section-label"><span>@(myOrder? "Account": "Dashboard")</span></div>
+		<h2 class="section-title mb-0">@(myOrder ? "My Orders" : "Order List")</h2>
 	</div>
 	<!-- Status Filter Tabs (the "active" class marks the selected tab) -->
 	<div class="d-flex gap-2 flex-wrap mt-3 mt-md-0">
-		<a asp-controller="Order" asp-action="OrderIndex" asp-route-status="all" class="category-chip @all">
+		<a asp-controller="Order" asp-action="OrderIndex" asp-route-status="all" asp-route-myorder="@(myOrder ? "true" : null)" class="category-chip @all">
 			<i class="bi bi-grid-3x3-gap"></i>All
 		</a>
-		<a asp-controller="Order" asp-action="OrderIndex" asp-route-status="approved" class="category-chip @approved">
+		<a asp-controller="Order" asp-action="OrderIndex" asp-route-status="approved" asp-route-myorder="@(myOrder ? "true" : null)" class="category-chip @approved">
 			<i class="bi bi-check-circle"></i>Approved
 		</a>
-		<a asp-controller="Order" asp-action="OrderIndex" asp-route-status="readyforpickup" class="category-chip @readyforpickup">
+		<a asp-controller="Order" asp-action="OrderIndex" asp-route-status="readyforpickup" asp-route-myorder="@(myOrder ? "true" : null)" class="category-chip @readyforpickup">
 			<i class="bi bi-bag-check"></i>Ready for Pickup
 		</a>
-		<a asp-controller="Order" asp-action="OrderIndex" asp-route-status="cancelled" class="category-chip @cancelled">
+		<a asp-controller="Order" asp-action="OrderIndex" asp-route-status="cancelled" asp-route-myorder="@(myOrder ? "true" : null)" class="category-chip @cancelled">
 			<i class="bi bi-x-circle"></i>Cancelled
 		</a>
 	</div>
