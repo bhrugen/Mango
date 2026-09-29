@@ -69,7 +69,7 @@ namespace Mango.RewardsAPI.Messaging
                 }
 
                 //Send Email 
-                await _emailService.RegisterUserEmailAndLog(email);
+              //  await _emailService.RegisterUserEmailAndLog(email);
                 await args.CompleteMessageAsync(message);
             }
             catch (Exception ex)
@@ -92,15 +92,15 @@ namespace Mango.RewardsAPI.Messaging
 
             try
             {
-                CartDto? objMessage = JsonConvert.DeserializeObject<CartDto>(body);
-                if (objMessage == null)
-                {
-                    _logger.LogError("Failed to deserialize message body to CartDto. Message body: {MessageBody}", body);
-                    return;
-                }
+                //CartDto? objMessage = JsonConvert.DeserializeObject<CartDto>(body);
+                //if (objMessage == null)
+                //{
+                //    _logger.LogError("Failed to deserialize message body to CartDto. Message body: {MessageBody}", body);
+                //    return;
+                //}
                 
-                //Send Email 
-                _emailService.EmailCartAndLog(objMessage).GetAwaiter().GetResult();
+                ////Send Email 
+                //_emailService.EmailCartAndLog(objMessage).GetAwaiter().GetResult();
                 await args.CompleteMessageAsync(message);
             }
             catch(Exception ex)

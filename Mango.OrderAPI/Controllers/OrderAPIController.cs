@@ -119,6 +119,11 @@ namespace Mango.OrderAPI.Controllers
                     orderHeader.Status = SD.Status_Approved;
                     await _db.SaveChangesAsync();
                     _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
+
+
+                    string topicName = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");
+                    await _messageBus.PublishMessage(topicName, _response.Result);
+
                 }
                 else
                 {
