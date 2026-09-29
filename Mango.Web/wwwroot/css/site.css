@@ -1426,3 +1426,46 @@ h1, h2, h3, .display-1, .display-2, .display-3, .display-4 {
             border-color: rgba(255, 255, 255, 0.6) !important;
             color: #fff !important;
         }
+
+/* DataTables — header styling and controls */
+table.dataTable > thead > tr > th {
+    background: #e9ecef;
+    color: #495057;
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: 0.85rem;
+    padding: 10px;
+    border-bottom: 2px solid #ced4da;
+    /* short "|" divider between header cells */
+    background-image: linear-gradient(#adb5bd, #adb5bd);
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 1px 55%;
+}
+
+table.dataTable > thead > tr > th:last-child {
+    background-image: none;
+}
+
+/* title on the left, sort icons pushed to the right */
+table.dataTable > thead > tr > th .dt-column-header {
+    display: flex;
+    flex-direction: row !important; /* numeric columns (ID, Total) are reversed by default */
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+table.dataTable > thead > tr > th.dt-type-numeric {
+    text-align: left;
+}
+
+table.dataTable > thead > tr > th .dt-column-order {
+    position: static;
+    flex-shrink: 0;
+}
+
+/* space between the page-length dropdown and its "entries per page" label */
+div.dt-container div.dt-length select {
+    margin-right: 0.6rem;
+}

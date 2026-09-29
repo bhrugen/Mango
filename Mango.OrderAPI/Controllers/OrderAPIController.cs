@@ -6,10 +6,12 @@ using Mango.OrderAPI.Models.Dto;
 using Mango.OrderAPI.Service.IService;
 using Mango.OrderAPI.Utility;
 using Mango.Serives.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.PortableExecutable;
+using System.Security.Claims;
 
 namespace Mango.OrderAPI.Controllers
 {
@@ -33,22 +35,34 @@ namespace Mango.OrderAPI.Controllers
             _messageBus = messageBus;
             _configuration = configuration;
         }
+
+        private bool IsAdmin =>
+            User.Claims.Any(c => (c.Type == ClaimTypes.Role || c.Type == "role")
+                                 && string.Equals(c.Value, SD.RoleAdmin, StringComparison.OrdinalIgnoreCase));
+
+        private string? CurrentUserId =>
+            User.FindFirst("sub")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        [Authorize]
         [HttpGet("GetOrders", Name = "GetOrders")]
         public async Task<ActionResult<ResponseDto>> GetOrders(string? userId="")
         {
             try
             {
-                IEnumerable<OrderHeader> objList;
+                // Non-admins can only ever see their own orders, whatever userId they pass.
+                if (!IsAdmin)
+                {
+                    userId = CurrentUserId;
+                    if (string.IsNullOrEmpty(userId)) return Forbid();
+                }
 
-                if(string.IsNullOrEmpty(userId))
+                IQueryable<OrderHeader> query = _db.OrderHeader.AsNoTracking();
+                if (!string.IsNullOrEmpty(userId))
                 {
-                    objList = await _db.OrderHeader.AsNoTracking().ToListAsync();
+                    query = query.Where(u => u.UserId == userId);
                 }
-                else
-                {
-                    objList = await _db.OrderHeader.AsNoTracking().Where(u => u.UserId == userId).ToListAsync();
-                }
-                    _response.Result = _mapper.Map<List<OrderHeaderDto>>(objList);
+                var objList = await query.OrderByDescending(u => u.OrderHeaderId).ToListAsync();
+                _response.Result = _mapper.Map<List<OrderHeaderDto>>(objList);
             }
             catch (Exception ex)
             {
@@ -60,13 +74,26 @@ namespace Mango.OrderAPI.Controllers
         }
 
 
+        [Authorize]
         [HttpGet("GetOrder/{id:int}", Name = "GetOrderById")]
         public async Task<ActionResult<ResponseDto>> GetOrderById(int id)
         {
             try
             {
-                OrderHeader? orderHeader = 
-                    await _db.OrderHeader.AsNoTracking().Where(u => u.OrderHeaderId == id).FirstOrDefaultAsync();
+                OrderHeader? orderHeader = await _db.OrderHeader.AsNoTracking()
+                    .Include(u => u.OrderDetails)
+                    .FirstOrDefaultAsync(u => u.OrderHeaderId == id);
+
+                if (orderHeader == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessage = $"Order with ID {id} not found.";
+                    return NotFound(_response);
+                }
+                if (!IsAdmin && orderHeader.UserId != CurrentUserId)
+                {
+                    return Forbid();
+                }
 
                 _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
             }
@@ -142,11 +169,26 @@ namespace Mango.OrderAPI.Controllers
         }
 
 
+        [Authorize]
         [HttpPost("UpdateOrderStatus/{orderId:int}")]
         public async Task<ActionResult<ResponseDto>> UpdateOrderStatus(int orderId, [FromBody] string status)
         {
             try
             {
+                if (!IsAdmin) return Forbid();
+
+                string[] validStatuses =
+                {
+                    SD.Status_Pending, SD.Status_Approved, SD.Status_ReadyForPickup,
+                    SD.Status_Completed, SD.Status_Refunded, SD.Status_Cancelled
+                };
+                if (!validStatuses.Contains(status))
+                {
+                    _response.IsSuccess = false;
+                    _response.ErrorMessage = $"Invalid status '{status}'.";
+                    return BadRequest(_response);
+                }
+
                 OrderHeader orderHeader = await _db.OrderHeader.FirstOrDefaultAsync(u => u.OrderHeaderId == orderId);
                 if (orderHeader != null)
                 {
