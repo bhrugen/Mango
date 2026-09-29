@@ -18,6 +18,7 @@ namespace Mango.Web.Controllers
             return View();
         }
 
+
         [HttpGet]
         public async Task<IActionResult> GetAllOrders()
         {
@@ -30,9 +31,9 @@ namespace Mango.Web.Controllers
             {
                 var result = Convert.ToString(response.Result);
                 var orders = JsonConvert.DeserializeObject<List<OrderHeaderDto>>(result);
-                return View(orders);
+                return Json(new { data = orders });
             }
-            return View(new List<OrderHeaderDto>());
+            return Json(new { data = new List<OrderHeaderDto>() });
         }
     }
 }
