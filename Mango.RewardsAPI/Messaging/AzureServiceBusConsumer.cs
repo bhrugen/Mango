@@ -1,5 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Mango.RewardsAPI.Services.IServices;
+using Mango.Web.Models;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -8,12 +9,11 @@ namespace Mango.RewardsAPI.Messaging
     public class AzureServiceBusConsumer : IHostedService
     {
         private readonly IConfiguration _configuration;
-        private ServiceBusProcessor _emailCartProcessor;
-        private ServiceBusProcessor _registerUserProcessor;
+        private ServiceBusProcessor _rewardsProcessor;
         private readonly IRewardService _rewardService;   
         private readonly string serviceBusConnectionString;
-        private readonly string registerUserQueue;
-        private readonly string emailCartQueue;
+        private readonly string orderCreatedTopic;
+        private readonly string orderCreatedRewardSubscription;
 
         private readonly ILogger<AzureServiceBusConsumer> _logger;
 
@@ -25,51 +25,42 @@ namespace Mango.RewardsAPI.Messaging
             _rewardService = rewardService;
             serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString")
                 ?? throw new InvalidOperationException("Missing configuration value: ServiceBusConnectionString");
-            registerUserQueue = _configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue")
-               ?? throw new InvalidOperationException("Missing configuration value: RegisterUserQueue");
-            emailCartQueue = _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue")
-                ?? throw new InvalidOperationException("Missing configuration value: EmailShoppingCartQueue");
+            orderCreatedTopic = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic")
+               ?? throw new InvalidOperationException("Missing configuration value: OrderCreatedTopic");
+            orderCreatedRewardSubscription = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedRewardsSubscription")
+                ?? throw new InvalidOperationException("Missing configuration value: OrderCreatedRewardsSubscription");
 
             var client = new ServiceBusClient(serviceBusConnectionString);
-            _emailCartProcessor = client.CreateProcessor(emailCartQueue, new ServiceBusProcessorOptions
+            _rewardsProcessor = client.CreateProcessor(orderCreatedTopic, orderCreatedRewardSubscription, new ServiceBusProcessorOptions
             {
                 AutoCompleteMessages = false
             });
-            _registerUserProcessor = client.CreateProcessor(registerUserQueue, new ServiceBusProcessorOptions
-            {
-                AutoCompleteMessages = false
-            });
+           
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            _emailCartProcessor.ProcessMessageAsync += OnEmailCartRequestReceived;
-            _emailCartProcessor.ProcessErrorAsync += ErrorHandler;
-            await _emailCartProcessor.StartProcessingAsync(cancellationToken);
-
-
-
-            _registerUserProcessor.ProcessMessageAsync += OnRegisterUserRequestReceived;
-            _registerUserProcessor.ProcessErrorAsync += ErrorHandler;
-            await _registerUserProcessor.StartProcessingAsync(cancellationToken);
+            _rewardsProcessor.ProcessMessageAsync += OnNewOrderRewardsRequestReceived;
+            _rewardsProcessor.ProcessErrorAsync += ErrorHandler;
+            await _rewardsProcessor.StartProcessingAsync(cancellationToken);
         }
 
-        private async Task OnRegisterUserRequestReceived(ProcessMessageEventArgs args)
+        private async Task OnNewOrderRewardsRequestReceived(ProcessMessageEventArgs args)
         {
             var message = args.Message;
             var body = Encoding.UTF8.GetString(message.Body);
 
             try
             {
-                string? email = JsonConvert.DeserializeObject<string>(body);
-                if (email == null)
+                OrderHeaderDto? orderHeader = JsonConvert.DeserializeObject<OrderHeaderDto>(body);
+                if (orderHeader == null)
                 {
-                    _logger.LogError("Failed to deserialize message body to string. Message body: {MessageBody}", body);
+                    _logger.LogError("Failed to deserialize message body to OrderHeaderDto. Message body: {MessageBody}", body);
                     return;
                 }
 
-                //Send Email 
-              //  await _emailService.RegisterUserEmailAndLog(email);
+               
+                await _rewardService.UpdateRewards(orderHeader);
                 await args.CompleteMessageAsync(message);
             }
             catch (Exception ex)
@@ -85,37 +76,12 @@ namespace Mango.RewardsAPI.Messaging
             return Task.CompletedTask;
         }
 
-        private async Task OnEmailCartRequestReceived(ProcessMessageEventArgs args)
-        {
-            var message = args.Message;
-            var body =Encoding.UTF8.GetString(message.Body);
-
-            try
-            {
-                //CartDto? objMessage = JsonConvert.DeserializeObject<CartDto>(body);
-                //if (objMessage == null)
-                //{
-                //    _logger.LogError("Failed to deserialize message body to CartDto. Message body: {MessageBody}", body);
-                //    return;
-                //}
-                
-                ////Send Email 
-                //_emailService.EmailCartAndLog(objMessage).GetAwaiter().GetResult();
-                await args.CompleteMessageAsync(message);
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while processing message from Service Bus.");
-                await args.DeadLetterMessageAsync(message, "DeserializationError", ex.Message);
-            }
-        }
+      
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            await _emailCartProcessor.StopProcessingAsync(cancellationToken);
-            await _emailCartProcessor.DisposeAsync();
-            await _registerUserProcessor.StopProcessingAsync(cancellationToken);
-            await _registerUserProcessor.DisposeAsync();
+            await _rewardsProcessor.StopProcessingAsync(cancellationToken);
+            await _rewardsProcessor.DisposeAsync();
         }
     }
 }

@@ -2,6 +2,7 @@
 using Mango.RewardsAPI.Models;
 using Mango.RewardsAPI.Models.Dto;
 using Mango.RewardsAPI.Services.IServices;
+using Mango.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 
@@ -15,13 +16,13 @@ namespace Mango.RewardsAPI.Services
             _dbContextOptions = dbContextOptions;
         }
 
-        public async Task UpdateRewards(RewardsDto rewardsDto)
+        public async Task UpdateRewards(OrderHeaderDto orderHeaderDto)
         {
            Rewards rewards = new()
            {
-               UserId = rewardsDto.UserId,
-               RewardsActivity = rewardsDto.RewardsActivity,
-               OrderId = rewardsDto.OrderId,
+               UserId = orderHeaderDto.UserId,
+               RewardsActivity = Convert.ToInt32(orderHeaderDto.OrderTotal),
+               OrderId = orderHeaderDto.OrderHeaderId,
                RewardsDate = DateTime.Now
            };
             await using var _db = new ApplicationDbContext(_dbContextOptions);

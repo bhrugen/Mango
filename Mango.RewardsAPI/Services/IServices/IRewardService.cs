@@ -1,10 +1,10 @@
 ﻿
-using Mango.RewardsAPI.Models.Dto;
+using Mango.Web.Models;
 
 namespace Mango.RewardsAPI.Services.IServices
 {
     public interface IRewardService
     {
-        Task UpdateRewards(RewardsDto rewardsDto);
+        Task UpdateRewards(OrderHeaderDto orderHeaderDto);
     }
 }
