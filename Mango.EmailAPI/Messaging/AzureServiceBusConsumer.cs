@@ -89,7 +89,7 @@ namespace Mango.EmailAPI.Messaging
                 }
 
                 //Send Email 
-                //await _emailService.RegisterUserEmailAndLog(email);
+                await _emailService.OrderCreatedEmailAndLog(orderHeaderDto);
                 await args.CompleteMessageAsync(message);
             }
             catch (Exception ex)
