@@ -1,7 +1,7 @@
 {
-  
-  
-  //"OrderAPI": "https://localhost:7004",
+
+
+
   "Routes": [
     {
       "UpstreamHttpMethod": [ "Get" ],
@@ -140,7 +140,7 @@
         }
       ]
     },
-    
+
     {
       "UpstreamHttpMethod": [ "POST" ],
       "UpstreamPathTemplate": "/api/cart/ApplyCoupon",
@@ -200,10 +200,80 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
+    },
+
+
+
+    //"OrderAPI": "https://localhost:7004",
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/api/orders/GetOrders",
+      "DownstreamPathTemplate": "/api/orders/GetOrders",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7004
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/api/orders/GetOrderById/{orderId}",
+      "DownstreamPathTemplate": "/api/orders/GetOrderById/{orderId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7004
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamPathTemplate": "/api/orders/UpdateOrderStatus/{orderId}",
+      "DownstreamPathTemplate": "/api/orders/UpdateOrderStatus/{orderId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7004
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamPathTemplate": "/api/orders/CreateOrder",
+      "DownstreamPathTemplate": "/api/orders/CreateOrder",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7004
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamPathTemplate": "/api/orders/ConfirmOrder/{orderId}",
+      "DownstreamPathTemplate": "/api/orders/ConfirmOrder/{orderId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7004
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     }
-
-
-
 
 
 
