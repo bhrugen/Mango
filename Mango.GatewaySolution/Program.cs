@@ -8,6 +8,7 @@ builder.AddJwtAuthentication();
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 
 var app = builder.Build();
-app.MapGet("/", () => "Hello World!");
+app.MapWhen(ctx => ctx.Request.Path == "/", root =>
+    root.Run(ctx => ctx.Response.WriteAsync("Hello World!")));
 app.UseOcelot();
 app.Run();
