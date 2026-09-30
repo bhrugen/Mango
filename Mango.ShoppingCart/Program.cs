@@ -49,4 +49,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+ApplyMigration();
 app.Run();
+
+void ApplyMigration()
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate();
+}
