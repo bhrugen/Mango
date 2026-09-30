@@ -10,7 +10,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangoproductapi-etdzduescnc5brd7.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7000
         }
       ]
     },
@@ -21,7 +22,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangoproductapi-etdzduescnc5brd7.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7000
         }
       ]
     },
@@ -32,7 +34,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangoproductapi-etdzduescnc5brd7.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7000
         }
       ],
       "AuthenticationOptions": {
@@ -46,7 +49,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangoproductapi-etdzduescnc5brd7.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7000
         }
       ],
       "AuthenticationOptions": {
@@ -62,7 +66,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangocouponapi-hjcxdyakcga9cqft.eastus-01.azurewebsites.net"
+          "Host": "mangocouponapi-hjcxdyakcga9cqft.eastus-01.azurewebsites.net",
+          "Port": 7001
         }
       ]
     },
@@ -73,7 +78,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangocouponapi-hjcxdyakcga9cqft.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7001
         }
       ]
     },
@@ -84,7 +90,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangocouponapi-hjcxdyakcga9cqft.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7001
         }
       ]
     },
@@ -95,7 +102,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangocouponapi-hjcxdyakcga9cqft.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7001
         }
       ],
       "AuthenticationOptions": {
@@ -109,7 +117,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangocouponapi-hjcxdyakcga9cqft.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7001
         }
       ],
       "AuthenticationOptions": {
@@ -126,7 +135,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangoshoppingcartapi-hkech8c9aydhfdda.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7003
         }
       ]
     },
@@ -138,7 +148,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangoshoppingcartapi-hkech8c9aydhfdda.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7003
         }
       ],
       "AuthenticationOptions": {
@@ -152,7 +163,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangoshoppingcartapi-hkech8c9aydhfdda.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7003
         }
       ],
       "AuthenticationOptions": {
@@ -166,7 +178,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangoshoppingcartapi-hkech8c9aydhfdda.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7003
         }
       ],
       "AuthenticationOptions": {
@@ -180,7 +193,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangoshoppingcartapi-hkech8c9aydhfdda.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7003
         }
       ],
       "AuthenticationOptions": {
@@ -198,7 +212,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangoorderapi-h5apgfhte3cxf7hx.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7004
         }
       ]
     },
@@ -209,7 +224,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangoorderapi-h5apgfhte3cxf7hx.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7004
         }
       ]
     },
@@ -220,7 +236,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangoorderapi-h5apgfhte3cxf7hx.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7004
         }
       ],
       "AuthenticationOptions": {
@@ -234,7 +251,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangoorderapi-h5apgfhte3cxf7hx.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7004
         }
       ],
       "AuthenticationOptions": {
@@ -248,7 +266,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "mangoorderapi-h5apgfhte3cxf7hx.eastus-01.azurewebsites.net"
+          "Host": "localhost",
+          "Port": 7004
         }
       ],
       "AuthenticationOptions": {
@@ -261,6 +280,6 @@
 
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "https://mangogatewaysolution-g2dyh5auexdedmds.eastus-01.azurewebsites.net/"
+    "BaseUrl": "https://localhost:7777"
   }
 }
