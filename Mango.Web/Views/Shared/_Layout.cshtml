@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Mango.Web.Utility
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -33,29 +34,34 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        @if (User.IsInRole(SD.RoleAdmin))
+                                {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="manageDropdown"
                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-sliders me-1"></i>Manage
                             </a>
-                            <ul class="dropdown-menu dropdown-restaurant" aria-labelledby="manageDropdown">
-                                <li>
-                                    <a asp-controller="Coupon" asp-action="CouponIndex" class="dropdown-item">
-                                        <i class="bi bi-ticket-perforated text-warning"></i>Coupons
-                                    </a>
-                                </li>
-                                <li>
-                                    <a asp-controller="Product" asp-action="ProductIndex" class="dropdown-item">
-                                        <i class="bi bi-egg-fried text-warning"></i>Dishes
-                                    </a>
-                                </li>
-                                <li>
-                                    <a asp-controller="Order" asp-action="OrderIndex" class="dropdown-item">
-                                        <i class="bi bi-receipt text-warning"></i>Orders
-                                    </a>
-                                </li>
-                            </ul>
+                            
+                                    <ul class="dropdown-menu dropdown-restaurant" aria-labelledby="manageDropdown">
+                                        <li>
+                                            <a asp-controller="Coupon" asp-action="CouponIndex" class="dropdown-item">
+                                                <i class="bi bi-ticket-perforated text-warning"></i>Coupons
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a asp-controller="Product" asp-action="ProductIndex" class="dropdown-item">
+                                                <i class="bi bi-egg-fried text-warning"></i>Dishes
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a asp-controller="Order" asp-action="OrderIndex" class="dropdown-item">
+                                                <i class="bi bi-receipt text-warning"></i>Orders
+                                            </a>
+                                        </li>
+                                    </ul>
+                               
                         </li>
+                        }
                         <li class="nav-item">
                             <a asp-controller="Order" asp-action="OrderIndex" class="nav-link text-dark" asp-route-myorder="true">
                                 <i class="bi bi-receipt text-warning"></i> My Orders

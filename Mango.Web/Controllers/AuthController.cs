@@ -98,7 +98,8 @@ namespace Mango.Web.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwt = tokenHandler.ReadJwtToken(model.Token);
 
-            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme,
+                JwtRegisteredClaimNames.Name, ClaimTypes.Role);
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub,
                 jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub).Value));
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.PhoneNumber,
