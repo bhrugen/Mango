@@ -70,6 +70,7 @@ namespace Mango.ProductAPI.Controllers
         // POST: api/Product
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles ="ADMIN")]
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<Product>> CreateProduct([FromForm] ProductDto productDto)
         {
@@ -104,6 +105,7 @@ namespace Mango.ProductAPI.Controllers
         // PUT: api/Product/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> UpdateProduct([FromForm] ProductDto productDto)
         {
@@ -140,6 +142,7 @@ namespace Mango.ProductAPI.Controllers
 
         // DELETE: api/Product/5
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             try
