@@ -122,7 +122,7 @@ namespace Mango.OrderAPI.Controllers
 
 
                     string topicName = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");
-                    await _messageBus.PublishMessage(topicName, _response.Result);
+                    await _messageBus.PublishToExchange(topicName, _response.Result);
 
                 }
                 else

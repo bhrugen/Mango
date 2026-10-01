@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Mango.MessageBus
 {
     public interface IMessageBus
     {
-        Task PublishMessage(string queue_topic_Name, object message);
+        /// <summary>Publishes to a durable queue (point-to-point).</summary>
+        Task PublishMessage(string queueName, object message);
+
+        /// <summary>Publishes to a fanout exchange; every queue bound to it receives a copy (pub/sub).</summary>
+        Task PublishToExchange(string exchangeName, object message);
     }
 }

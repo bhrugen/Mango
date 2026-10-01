@@ -1,28 +1,32 @@
-﻿using Azure.Messaging.ServiceBus;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+using RabbitMQ.Client;
 using System.Text;
 
 namespace Mango.MessageBus
 {
     public class MessageBus : IMessageBus
     {
-
-        private string connectionString = "Endpoint=sb://mangoweb.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=BCk8ly3QlYE+JmRoqPUY5cyDkY6Bfqz/9+ASbOLbZpQ=";
-
-        public async Task PublishMessage(string queue_topic_Name, object message)
+        public async Task PublishMessage(string queueName, object message)
         {
-            await using var client = new ServiceBusClient(connectionString);
+            await using var connection = await RabbitMQConnection.CreateFactory().CreateConnectionAsync();
+            await using var channel = await connection.CreateChannelAsync();
+            await channel.QueueDeclareAsync(queueName, durable: true, exclusive: false, autoDelete: false);
+            await PublishAsync(channel, exchange: "", routingKey: queueName, message);
+        }
 
-            ServiceBusSender sender = client.CreateSender(queue_topic_Name);
+        public async Task PublishToExchange(string exchangeName, object message)
+        {
+            await using var connection = await RabbitMQConnection.CreateFactory().CreateConnectionAsync();
+            await using var channel = await connection.CreateChannelAsync();
+            await channel.ExchangeDeclareAsync(exchangeName, ExchangeType.Fanout, durable: true);
+            await PublishAsync(channel, exchange: exchangeName, routingKey: "", message);
+        }
 
-            var jsonMessage = JsonConvert.SerializeObject(message);
-
-            ServiceBusMessage busMessage = new ServiceBusMessage(jsonMessage);
-
-            await sender.SendMessageAsync(busMessage);
-            
+        private static async Task PublishAsync(IChannel channel, string exchange, string routingKey, object message)
+        {
+            var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
+            var props = new BasicProperties { Persistent = true, ContentType = "application/json" };
+            await channel.BasicPublishAsync(exchange, routingKey, mandatory: false, props, body);
         }
     }
 }

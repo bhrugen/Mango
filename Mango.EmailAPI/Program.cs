@@ -21,7 +21,9 @@ optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultCo
 builder.Services.AddSingleton<IEmailService>(new EmailService(optionsBuilder.Options));
 
 builder.Services.AddControllers();
-builder.Services.AddHostedService<AzureServiceBusConsumer>();
+builder.Services.AddHostedService<RabbitMQAuthConsumer>();
+builder.Services.AddHostedService<RabbitMQCartConsumer>();
+builder.Services.AddHostedService<RabbitMQOrderConsumer>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

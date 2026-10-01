@@ -20,7 +20,7 @@ optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultCo
 builder.Services.AddSingleton<IRewardService>(new RewardService(optionsBuilder.Options));
 
 builder.Services.AddControllers();
-builder.Services.AddHostedService<AzureServiceBusConsumer>();
+builder.Services.AddHostedService<RabbitMQOrderConsumer>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
